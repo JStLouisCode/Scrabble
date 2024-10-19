@@ -1,51 +1,41 @@
-/**
- * The Tile class represents a tile in the Scrabble game.
- * Each tile has a letter and a point value associated with it.
- */
 public class Tile {
-
-    // Attributes
-
-    // Letter printed on the tile (e.g., 'A', 'J', 'Y').
     private char letter;
-
-    // Point value of the tile (e.g., 'A' = 1, 'J' = 3, 'Z' = 10).
     private int value;
 
-
-    // Constructor
-
-    /**
-     * Constructor for the Tile class.
-     * Initializes the tile with a specific letter and value.
-     *
-     * @param letter The character on the tile.
-     * @param value  The point value of the tile.
-     */
-    public Tile(char letter, int value) {
+    public Tile(char letter) {
         this.letter = letter;
-        this.value = value;
+        this.value = assignValue(letter); // Automatically assign value
     }
 
+    private static int assignValue(char letter) { //assign value to each letter according to scrabble rules
+        return switch (Character.toLowerCase(letter)) {
+            case 'a', 'e', 'i', 'o', 'u', 'l', 'n', 's', 't', 'r' -> 1;
+            case 'd', 'g' -> 2;
+            case 'b', 'c', 'm', 'p' -> 3;
+            case 'f', 'h', 'v', 'w', 'y' -> 4;
+            case 'k' -> 5;
+            case 'j', 'x' -> 8;
+            case 'q', 'z' -> 10;
+            default -> 0; // In case of an invalid or blank ' ' character
+        };
+    }
 
-    // Getters
-
-    /**
-     * Gets the letter on the tile.
-     *
-     * @return The character printed on the tile.
-     */
     public char getLetter() {
         return letter;
     }
 
-    /**
-     * Gets the point value of the tile.
-     *
-     * @return The point value associated with the tile.
-     */
+    public void setLetter(char letter) {
+        this.letter = letter;
+        this.value = assignValue(letter);
+    }
+
     public int getValue() {
         return value;
+    }
+
+    @Override
+    public String toString() {
+        return "(" + letter + ")" + value;
     }
 }
 
