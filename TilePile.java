@@ -1,13 +1,14 @@
 import java.util.ArrayList;
 
-public class TileStack {
+public class TilePile {
     ArrayList<Tile> tiles;
-    TileStack(){
+    TilePile(){
         this.tiles = new ArrayList<>();
     }
-    public void addTile(char letter, int points, int count){
+
+    public void addTile(char letter, int count){
         for (int i = 0; i < count; i++) {
-            this.tiles.add(new Tile(letter,points));
+            this.tiles.add(new Tile(letter));
         }
     }
 
