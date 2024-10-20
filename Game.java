@@ -19,22 +19,22 @@ public class Game {
         this.tilePile.addTile('H', 2);
         this.tilePile.addTile('I', 9);
         this.tilePile.addTile('J', 1);
-        this.tilePile.addTile('K', 12);
-        this.tilePile.addTile('L', 2);
-        this.tilePile.addTile('M', 9);
-        this.tilePile.addTile('N', 2);
-        this.tilePile.addTile('O', 2);
-        this.tilePile.addTile('P', 4);
-        this.tilePile.addTile('Q', 12);
-        this.tilePile.addTile('R', 2);
-        this.tilePile.addTile('S', 9);
-        this.tilePile.addTile('T', 2);
-        this.tilePile.addTile('U', 2);
-        this.tilePile.addTile('V', 4);
-        this.tilePile.addTile('W', 12);
-        this.tilePile.addTile('X', 2);
-        this.tilePile.addTile('Y', 12);
-        this.tilePile.addTile('Z', 2);
+        this.tilePile.addTile('K', 1);
+        this.tilePile.addTile('L', 4);
+        this.tilePile.addTile('M', 2);
+        this.tilePile.addTile('N', 6);
+        this.tilePile.addTile('O', 8);
+        this.tilePile.addTile('P', 2);
+        this.tilePile.addTile('Q', 1);
+        this.tilePile.addTile('R', 6);
+        this.tilePile.addTile('S', 4);
+        this.tilePile.addTile('T', 6);
+        this.tilePile.addTile('U', 4);
+        this.tilePile.addTile('V', 2);
+        this.tilePile.addTile('W', 2);
+        this.tilePile.addTile('X', 1);
+        this.tilePile.addTile('Y', 2);
+        this.tilePile.addTile('Z', 1);
         Collections.shuffle(tilePile.getPile());
     }
     public void initializePlayer(){
@@ -57,8 +57,10 @@ public class Game {
             for (int i = 0; i < 4; i++) {
                 player[i].displayHand();
                 System.out.println("What word would you like to play?");
+                //impliment logic
 
                 System.out.println("Would you like to play the word vertically or horizontally?\n\n");
+                //imppliment logicil
             }
 
     }
