@@ -3,6 +3,7 @@ import java.util.Collections;
 public class Game {
     private TilePile tilePile;
     private Player[] player = new Player[4];
+    private Board board;
     public Game(){
         this.tilePile = new TilePile();
     }
@@ -39,22 +40,33 @@ public class Game {
     public void initializePlayer(){
 
         for (int i = 0; i < 4; i++) {
-            player[i].setName(i);
-            for (int j = 0; j < 7; j++) {
 
+            player[i] = new Player(i);
+            for (int j = 0; j < 7; j++) {
+                player[i].addTile(tilePile.deleteTile());
             }
-            this.player[i].addTile(tilePile.deleteTile());
         }
 
     }
 
     public void play(){
+        System.out.println("Welcome to scrabble! here is the current board");
+        Board board = new Board(new Tile('A'));
+        board.displayBoard();
+
+            for (int i = 0; i < 4; i++) {
+                player[i].displayHand();
+                System.out.println("What word would you like to play?");
+
+                System.out.println("Would you like to play the word vertically or horizontally?\n\n");
+            }
 
     }
 
     public static void main(String[] args) {
         Board board = new Board(new Tile('A'));
         Game game = new Game();
+
         game.initializeTiles();
         game.initializePlayer();
 

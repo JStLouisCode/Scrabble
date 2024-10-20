@@ -4,24 +4,25 @@ public class Player {
     private int points;
     private String name;
 
-    public Player(String name){
+    public Player(int number){
         this.hand = new ArrayList<>();
         this.points = 0;
-        this.name  = name;
+        this.name  = ("Player"+(number+1));
     }
 
     public void addTile(Tile tile){
         this.hand.add(tile);
     }
 
-    public void setName(int number) {
-        this.name = ("Player"+number);
+    public String getName(){
+        return this.name;
     }
 
     public void displayHand(){
-        System.out.println(name + " has tiles: ");
+        System.out.print(name + " has tiles: ");
         for (Tile tile : hand) {
             System.out.print(tile.getLetter() + " ");
         }
+        System.out.println();
     }
 }

@@ -3,7 +3,6 @@ public class Board {
 
     public Board(Tile centerLetter){
         initializeBoard(centerLetter);
-        displayBoard();
     }
 
     public void displayBoard(){
