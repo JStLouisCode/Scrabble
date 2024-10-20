@@ -1,8 +1,8 @@
 public class Board {
     private Tile[][] board = new Tile[15][15];
 
-    public Board(){
-        initializeBoard();
+    public Board(Tile centerLetter){
+        initializeBoard(centerLetter);
         displayBoard();
     }
 
@@ -31,11 +31,12 @@ public class Board {
         }
     }
 
-    public void initializeBoard(){
+    public void initializeBoard(Tile centerLetter){
         for (int row = 0; row < 15; row++) {
             for (int col = 0; col < 15; col++) {
                 board[row][col] = new Tile(' ');
             }
         }
+        board[7][7] = centerLetter;
     }
 }
