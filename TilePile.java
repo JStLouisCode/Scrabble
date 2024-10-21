@@ -5,6 +5,8 @@ import java.util.ArrayList;
  * It manages adding, removing, and retrieving tiles from the pile.
  */
 public class TilePile {
+
+    // Attributes
     ArrayList<Tile> tiles; // A list to store the Tile objects in the pile.
 
     // Constructor

@@ -4,8 +4,8 @@
  */
 public class Tile {
 
-    // The letter printed on the tile (e.g., 'a', 'e', 'x').
-    char letter;
+    // Attributes
+    char letter; // The letter printed on the tile (e.g., 'a', 'e', 'x').
 
     // The point value assigned to the tile based on Scrabble rules.
     int points;
