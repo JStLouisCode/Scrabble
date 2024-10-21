@@ -22,6 +22,9 @@ public class Tile {
         return letter;
     }
 
+    public void setLetter(char newLetter){
+        letter = newLetter;
+    }
     public int getPoints() {
         return points;
     }

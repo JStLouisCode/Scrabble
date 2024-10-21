@@ -2,7 +2,7 @@ import java.util.*;
 
 public class Player {
     final private ArrayList<Tile> hand;
-    final private int points;
+    private int points;
     final private String name;
 
     public Player(int number){
@@ -23,6 +23,12 @@ public class Player {
             }
         }
         return false;
+    }
+    public void addPoints(int add){
+        this.points += add;
+    }
+    public int getPoints(){
+        return this.points;
     }
 
     public Tile removeTile(Tile tile) {

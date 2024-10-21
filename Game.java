@@ -9,9 +9,10 @@ public class Game {
     public Game(){
         this.player = new Player[4];
         this.tilePile = new TilePile();
-        this.board = new Board();
+        initializeTiles();
+        initializePlayer();
+        this.board = new Board(tilePile.deleteTile());
         this.check = new Word();
-
     }
 
     public void initializeTiles(){
@@ -60,37 +61,39 @@ public class Game {
         Scanner scanner = new Scanner(System.in); // input scanner
 
             for (int i = 0; i < 4; i++) {
-            System.out.println(player[i].getName() + "'s turn:");
-            player[i].displayHand();
+                System.out.println(player[i].getName() + " has " + player[i].getPoints());
+                System.out.println(player[i].getName() + "'s turn:");
+                player[i].displayHand();
 
-            
-            System.out.println("What word would you like to play?"); // Get word
-            String word = scanner.nextLine().toUpperCase().trim();
-            System.out.println(check.isWord(word.toLowerCase()));
-            if(!check.isWord(word.toLowerCase())){ // i cannot get this to work ***********
-                System.out.println("Invalid word, try again.");
-                i--;
-                continue;
-            }
-            // Get direction of the word
-            System.out.println("Would you like to play the word vertically (V) or horizontally (H)?");
-            char direction = scanner.nextLine().toUpperCase().charAt(0);
 
-            System.out.println("Enter starting row (1-15):"); // acquire starting coordinates
-            int row = scanner.nextInt() - 1; // adjust for array representation
-            System.out.println("Enter starting column (1-15):");
-            int col = scanner.nextInt() - 1; // adjust for array representation
-            scanner.nextLine(); // Consume newline
+                System.out.println("What word would you like to play?"); // Get word
+                String word = scanner.nextLine().toUpperCase().trim();
+                System.out.println(check.isWord(word.toLowerCase()));
+                if(!check.isWord(word.toLowerCase())){ // i cannot get this to work ***********
+                    System.out.println("Invalid word, try again.");
+                    i--;
+                    continue;
+                }
+                // Get direction of the word
+                System.out.println("Would you like to play the word vertically (V) or horizontally (H)?");
+                char direction = scanner.nextLine().toUpperCase().charAt(0);
 
-            // Validate word placement
-            if (canPlaceWord(word, row, col, direction, player[i])) {
-                placeWord(word, row, col, direction, player[i]);
-                board.displayBoard();
-            } else {
-                System.out.println("Invalid move, try again.");
-                i--; // Repeat the player's turn
-            }
-            if(i == 3){i = -1;}
+                System.out.println("Enter starting row (1-15):"); // acquire starting coordinates
+                int row = scanner.nextInt() - 1; // adjust for array representation
+                System.out.println("Enter starting column (1-15):");
+                int col = scanner.nextInt() - 1; // adjust for array representation
+                scanner.nextLine(); // Consume newline
+
+                // Validate word placement
+                if (canPlaceWord(word, row, col, direction, player[i])) {
+                    placeWord(word, row, col, direction, player[i]);
+                    board.displayBoard();
+                } else {
+                    System.out.println("Invalid move, try again.");
+                    i--; // Repeat the player's turn
+                }
+                if(i == 3){i = -1;}
+
         }
     }
 
@@ -133,14 +136,19 @@ public class Game {
                 }
             }
         }
+        addPoints(word, player);
+    }
+
+    private void addPoints(String word, Player player){
+        for (char letter : word.toCharArray()){
+            Tile tile = new Tile(letter);
+            player.addPoints(tile.getPoints());
+        }
     }
 
     public static void main(String[] args) {
 
         Game game = new Game();
-
-        game.initializeTiles();
-        game.initializePlayer();
 
         System.out.println();
 

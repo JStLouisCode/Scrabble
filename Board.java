@@ -1,12 +1,13 @@
 public class Board {
     private Tile[][] board = new Tile[15][15];
 
-    public Board(){
+    public Board(Tile centerTile){
         for (int row = 0; row < 15; row++) {
             for (int col = 0; col < 15; col++) {
                 board[row][col] = new Tile(' ');
             }
         }
+        board[7][7] = centerTile;
     }
 
     public void displayBoard(){
