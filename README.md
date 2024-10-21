@@ -1,4 +1,4 @@
-# Scrabble Game Project
+# Scrabble 
 
 This project is a simplified implementation of the Scrabble game using **Java**. It supports multiplayer gameplay with word validation and scoring mechanisms based on Scrabble rules.
 
