@@ -43,7 +43,7 @@ public class Word {
     }
 
     /**
-     * Checks if a given word exists in the wordBank.
+     * Checks if a given word exists in wordBank.
      *
      * @param word The word to check.
      * @return true if the word exists in the wordBank, false otherwise.
