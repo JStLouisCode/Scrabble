@@ -61,5 +61,4 @@ public class Tile {
     public int getPoints() {
         return points;
     }
-
 }
