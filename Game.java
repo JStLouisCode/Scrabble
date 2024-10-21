@@ -134,27 +134,80 @@ public class Game {
 
 
     // does not check compatibility with surrounding words *********
-    private boolean canPlaceWord(String word, int row, int col, char direction, Player player) { 
-        ArrayList<Character> hand = new ArrayList<>();
-        for (Tile tile : player.getHand()) {
-            hand.add(tile.getLetter());
+    private boolean canPlaceWord(String word, int row, int col, char direction, Player player) {
+        //out of bounds check
+        if (direction == 'H') {
+            if (word.length() + col > 15) return false;
+        } else {
+            if (word.length() + row > 15) return false;
         }
 
         for (int i = 0; i < word.length(); i++) {
-            // We must check from left to right for a horizontal word, and top down for vertical
-            char boardCheck = (direction == 'H') ? board.getTile(row, col + i).getLetter() : board.getTile(row + i, col).getLetter();
-            char wordChar = word.charAt(i);
+            char currentChar = word.charAt(i);
+            Tile boardTile = (direction == 'H') ? board.getTile(row, col + i) : board.getTile(row + i, col);
 
-            if (boardCheck == ' ') { 
-                if (!hand.contains(wordChar)) {
-                    return false; // Players rack does not contain all letters
-                }
-                hand.remove((Character) wordChar); // Use the letter from hand
-            } else if (boardCheck != wordChar) {
-                return false; // An existing letter prevents this word
+
+            if (boardTile.getLetter() == ' ') {
+                continue;
+            }
+
+            if (boardTile.getLetter() != currentChar) {
+                return false;
             }
         }
-        return true; // Word can be placed
+
+        if (direction == 'H') {
+            return horizontalAdjacencyCheck(word, row, col);
+        } else {
+            return verticalAdjacencyCheck(word, row, col);
+        }
+    }
+
+
+    private boolean horizontalAdjacencyCheck(String word, int row, int col) {
+        StringBuilder adjacent = new StringBuilder();
+        int startCol = col;
+
+        while (startCol > 0 && board.getTile(row, startCol - 1).getLetter() != ' ') {
+            startCol--;
+        }
+
+        for (int i = startCol; i < col; i++) {
+            adjacent.append(board.getTile(row, i).getLetter());
+        }
+
+        adjacent.append(word);
+
+        for (int i = col + word.length(); i < 15; i++) {
+            if (board.getTile(row, i).getLetter() == ' ') break;
+            adjacent.append(board.getTile(row, i).getLetter());
+        }
+
+        String formedWord = adjacent.toString().toLowerCase();
+        return check.isWord(formedWord);
+    }
+
+    private boolean verticalAdjacencyCheck(String word, int row, int col) {
+        StringBuilder adjacent = new StringBuilder();
+        int startRow = row;
+
+        while (startRow > 0 && board.getTile(startRow - 1, col).getLetter() != ' ') {
+            startRow--;
+        }
+
+        for (int i = startRow; i < row; i++) {
+            adjacent.append(board.getTile(i, col).getLetter());
+        }
+
+        adjacent.append(word);
+
+        for (int i = row + word.length(); i < 15; i++) {
+            if (board.getTile(i, col).getLetter() == ' ') break;
+            adjacent.append(board.getTile(i, col).getLetter());
+        }
+
+        String formedWord = adjacent.toString().toLowerCase();
+        return check.isWord(formedWord);
     }
 
     private void placeWord(String word, int row, int col, char direction, Player player) {
@@ -185,4 +238,6 @@ public class Game {
 
         game.play();
     }
+
+
 }
