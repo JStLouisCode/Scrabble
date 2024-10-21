@@ -56,46 +56,85 @@ public class Game {
         }
     }
 
-    public void play(){
-        System.out.println("Welcome to scrabble! Here is the current board");
-        board.displayBoard();
-        
-        Scanner scanner = new Scanner(System.in); // input scanner
+    private int[] checkValidRowCol(Scanner scanner) {
+        int row = -1, col = -1;
+        boolean validInput = false;
 
-            for (int i = 0; i < 4; i++) {
-            System.out.println(player[i].getName() + "'s turn:");
-            player[i].displayHand();
+        while (!validInput) {
+            try {
+                System.out.println("Enter starting row (1-15):");
+                row = Integer.parseInt(scanner.nextLine()) - 1; // Adjust for array indexing
 
-            
-            System.out.println("What word would you like to play?"); // Get word
-            String word = scanner.nextLine().toUpperCase().trim();
-            System.out.println(check.isWord(word.toLowerCase()));
-            if(!check.isWord(word.toLowerCase())){ // i cannot get this to work ***********
-                System.out.println("Invalid word, try again.");
-                i--;
-                continue;
+                System.out.println("Enter starting column (1-15):");
+                col = Integer.parseInt(scanner.nextLine()) - 1; // Adjust for array indexing
+
+                if (row >= 0 && row < 15 && col >= 0 && col < 15) {
+                    validInput = true;
+                } else {
+                    System.out.println("Invalid input. Please enter numbers between 1 and 15.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Please enter a valid number.");
             }
-            // Get direction of the word
-            System.out.println("Would you like to play the word vertically (V) or horizontally (H)?");
-            char direction = scanner.nextLine().toUpperCase().charAt(0);
+        }
 
-            System.out.println("Enter starting row (1-15):"); // acquire starting coordinates
-            int row = scanner.nextInt() - 1; // adjust for array representation
-            System.out.println("Enter starting column (1-15):");
-            int col = scanner.nextInt() - 1; // adjust for array representation
-            scanner.nextLine(); // Consume newline
+        return new int[]{row, col};
+    }
+
+
+    public void play() {
+        System.out.println("Welcome to Scrabble! Here is the current board");
+        board.displayBoard();
+
+        Scanner scanner = new Scanner(System.in); // Input scanner
+
+        int currentPlayer = 0; // Track the current player
+        while (true) { // Infinite loop for continuous turns
+            System.out.println(player[currentPlayer].getName() + "'s turn:");
+            player[currentPlayer].displayHand();
+
+            // Get word
+            System.out.println("What word would you like to play?");
+            String word = scanner.nextLine().toUpperCase().trim();
+
+            // Check if the word is valid
+            if (!check.isWord(word.toLowerCase())) {
+                System.out.println("Invalid word, try again.");
+                continue; // Start the turn over
+            }
+
+            // Get direction of the word
+            char direction = ' ';
+            while (direction != 'V' && direction != 'H') {
+                System.out.println("Would you like to play the word vertically (V) or horizontally (H)?");
+                String input = scanner.nextLine().toUpperCase().trim();
+                if (input.length() > 0) { //ensure that the input is not empty
+                    direction = input.charAt(0);
+                }
+                if (direction != 'V' && direction != 'H') {
+                    System.out.println("Invalid direction. Please enter 'V' for vertical or 'H' for horizontal.");
+                }
+            }
+
+            int[] rowCol = checkValidRowCol(scanner);
+            int row = rowCol[0];
+            int col = rowCol[1];
+
 
             // Validate word placement
-            if (canPlaceWord(word, row, col, direction, player[i])) {
-                placeWord(word, row, col, direction, player[i]);
+            if (canPlaceWord(word, row, col, direction, player[currentPlayer])) {
+                placeWord(word, row, col, direction, player[currentPlayer]);
                 board.displayBoard();
             } else {
                 System.out.println("Invalid move, try again.");
-                i--; // Repeat the player's turn
+                continue; // Repeat the player's turn
             }
-            if(i == 3){i = -1;}
+
+            // Move to the next player
+            currentPlayer = (currentPlayer + 1) % 4;
         }
     }
+
 
     // does not check compatibility with surrounding words *********
     private boolean canPlaceWord(String word, int row, int col, char direction, Player player) { 
