@@ -1,8 +1,12 @@
 public class Board {
     private Tile[][] board = new Tile[15][15];
 
-    public Board(Tile centerLetter){
-        initializeBoard(centerLetter);
+    public Board(){
+        for (int row = 0; row < 15; row++) {
+            for (int col = 0; col < 15; col++) {
+                board[row][col] = new Tile(' ');
+            }
+        }
     }
 
     public void displayBoard(){
@@ -17,6 +21,7 @@ public class Board {
         }
 
         System.out.println();
+
         for (int row = 0; row < 15; row++) {
             System.out.print(row+1);
             if(row<9){
@@ -30,12 +35,17 @@ public class Board {
         }
     }
 
-    public void initializeBoard(Tile centerLetter){
-        for (int row = 0; row < 15; row++) {
-            for (int col = 0; col < 15; col++) {
-                board[row][col] = new Tile(' ');
-            }
+    public Tile getTile(int row, int col) {
+        if (row >= 0 && row < 15 && col >= 0 && col < 15) {
+            return board[row][col];
+        } else {
+            return new Tile(' '); // Out-of-bounds positions are treated as empty
         }
-        board[7][7] = centerLetter;
+    }
+
+    public void setTile(int row, int col, Tile tile) {
+        if (row >= 0 && row < 15 && col >= 0 && col < 15) {
+            board[row][col] = tile;
+        }
     }
 }
