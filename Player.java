@@ -2,7 +2,7 @@ import java.util.*;
 
 public class Player {
     final private ArrayList<Tile> hand;
-    final private int points;
+    private int points;
     final private String name;
 
     public Player(int number){
@@ -77,5 +77,9 @@ public class Player {
             System.out.print(tile.getLetter() + " ");
         }
         System.out.println();
+    }
+
+    public void addPoints(int add) {
+        this.points += add;
     }
 }
