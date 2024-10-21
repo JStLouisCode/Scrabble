@@ -3,13 +3,16 @@ import java.util.*;
 public class Game {
     final private TilePile tilePile;
     final private Player[] player;
+
     final private Board board;
     final private Word check;
 
     public Game(){
         this.player = new Player[4];
         this.tilePile = new TilePile();
-        this.board = new Board();
+        initializeTiles();
+        initializePlayer();
+        this.board = new Board(tilePile.deleteTile());
         this.check = new Word();
 
     }
@@ -135,12 +138,17 @@ public class Game {
         }
     }
 
+    private void addPoints(String word, Player player){
+        for (char letter : word.toCharArray()){
+            Tile tile = new Tile(letter);
+            player.addPoints(tile.getPoints());
+        }
+    }
     public static void main(String[] args) {
 
         Game game = new Game();
 
-        game.initializeTiles();
-        game.initializePlayer();
+
 
         System.out.println();
 
