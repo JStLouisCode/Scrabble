@@ -176,12 +176,12 @@ public class Game {
 
             for (int i = 0; i < word.length(); i++) {
                 if (board.getTile(row + i, col).getLetter() == ' ') {
-                    if (!horizontalAdjacencyCheck(String.valueOf(word.charAt(i)), row + i, col)) { // does each letter create new valid horizontal adjacent words
+                    if (!horizontalAdjacencyCheck(String.valueOf(word.charAt(i)), row + i, col)) { // does each letter create new valid horizontal adjacent word
                         return false;
                     }
                 }
                 else if (isLetter(board.getTile(row+i, col).getLetter())) {
-                    existingLetter = true  ; // no blank tile so there must be a letter present to form word (technicall this is checked twice)
+                    existingLetter = true  ; // no blank tile so there must be a letter present to form word (technically this is checked twice)
                 }
             }
         }
