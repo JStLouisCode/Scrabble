@@ -247,10 +247,6 @@ public class Game {
         addPoints(word, player);
     }
 
-    public boolean isLetter(char c){ 
-        return Character.isLetter(c); // A-Z ?
-    }
-
     private void addPoints(String word, Player player){ 
         for (char letter : word.toCharArray()){
             Tile tile = new Tile(letter);
