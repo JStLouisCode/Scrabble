@@ -132,9 +132,8 @@ public class Game {
 
     private boolean canPlaceWord(String word, int row, int col, char direction, Player player) {
         boolean flag = true;
-        boolean existingLetter = false;
 
-        //out of bounds check
+        // out of bounds check
         if (direction == 'H') {
             if (word.length() + col > 15) return false;
         } else {
@@ -165,9 +164,7 @@ public class Game {
                     if (!verticalAdjacencyCheck(String.valueOf(word.charAt(i)), row, col + i)) { // does each letter create new valid vertical adjacent word
                         return false;
                     }
-                } else if (isLetter(board.getTile(row, col + i).getLetter())) {
-                    existingLetter = true  ; // no blank tile so there must be a letter present to form word (technically this is checked twice)
-                }
+                } 
             }
         } 
         else {
@@ -180,13 +177,8 @@ public class Game {
                         return false;
                     }
                 }
-                else if (isLetter(board.getTile(row+i, col).getLetter())) {
-                    existingLetter = true  ; // no blank tile so there must be a letter present to form word (technically this is checked twice)
-                }
+            
             }
-        }
-        if (!existingLetter){
-            flag = false;
         }
         return flag;
     }
