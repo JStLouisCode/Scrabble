@@ -134,6 +134,13 @@ public class Game {
         boolean flag = true;
         boolean existingLetter = false;
 
+        //out of bounds check
+        if (direction == 'H') {
+            if (word.length() + col > 15) return false;
+        } else {
+            if (word.length() + row > 15) return false;
+        }
+
         // first see if the word fits on the board
         for (int i = 0; i < word.length(); i++) {
             char currentChar = word.charAt(i);
@@ -155,11 +162,11 @@ public class Game {
 
             for (int i = 0; i < word.length(); i++) {
                 if (board.getTile(row, col + i).getLetter() == ' ') {
-                    if (!verticalAdjacencyCheck(String.valueOf(word.charAt(i)), row, col + i)) { // does each letter create new valid vertical adjacent words
+                    if (!verticalAdjacencyCheck(String.valueOf(word.charAt(i)), row, col + i)) { // does each letter create new valid vertical adjacent word
                         return false;
                     }
                 } else if (isLetter(board.getTile(row, col + i).getLetter())) {
-                    existingLetter = true  ; // no blank tile so there must be a letter present to form word (technicall this is checked twice)
+                    existingLetter = true  ; // no blank tile so there must be a letter present to form word (technically this is checked twice)
                 }
             }
         } 
