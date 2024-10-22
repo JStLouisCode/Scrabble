@@ -9,9 +9,10 @@ public class Game {
     public Game(){
         this.player = new Player[4];
         this.tilePile = new TilePile();
-        this.board = new Board();
+        this.initializeTiles();
+        this.initializePlayer();
+        this.board = new Board(tilePile.deleteTile());
         this.check = new Word();
-
     }
 
     public void initializeTiles(){
@@ -74,10 +75,8 @@ public class Game {
                 System.out.println("Invalid input. Please enter a valid number.");
             }
         }
-
         return new int[]{row, col};
     }
-
 
     public void play() {
         System.out.println("Welcome to Scrabble! Here is the current board");
@@ -117,7 +116,6 @@ public class Game {
             int row = rowCol[0];
             int col = rowCol[1];
 
-
             // Validate word placement
             if (canPlaceWord(word, row, col, direction, player[currentPlayer])) {
                 placeWord(word, row, col, direction, player[currentPlayer]);
@@ -132,21 +130,15 @@ public class Game {
         }
     }
 
-
-    // does not check compatibility with surrounding words *********
     private boolean canPlaceWord(String word, int row, int col, char direction, Player player) {
-        //out of bounds check
-        if (direction == 'H') {
-            if (word.length() + col > 15) return false;
-        } else {
-            if (word.length() + row > 15) return false;
-        }
+        boolean flag = true;
+        boolean existingLetter = false;
 
+        // first see if the word fits on the board
         for (int i = 0; i < word.length(); i++) {
             char currentChar = word.charAt(i);
             Tile boardTile = (direction == 'H') ? board.getTile(row, col + i) : board.getTile(row + i, col);
-
-
+            
             if (boardTile.getLetter() == ' ') {
                 continue;
             }
@@ -156,58 +148,86 @@ public class Game {
             }
         }
 
+        // now second layer check, new formed adjacent words must also be valid
         if (direction == 'H') {
-            return horizontalAdjacencyCheck(word, row, col);
-        } else {
-            return verticalAdjacencyCheck(word, row, col);
-        }
-    }
+            if (word.length() + col > 15) return false;
+            flag &= horizontalAdjacencyCheck(word, row, col); // does the word extend other letters?
 
+            for (int i = 0; i < word.length(); i++) {
+                if (board.getTile(row, col + i).getLetter() == ' ') {
+                    if (!verticalAdjacencyCheck(String.valueOf(word.charAt(i)), row, col + i)) { // does each letter create new valid vertical adjacent words
+                        return false;
+                    }
+                } else if (isLetter(board.getTile(row, col + i).getLetter())) {
+                    existingLetter = true  ; // no blank tile so there must be a letter present to form word (technicall this is checked twice)
+                }
+            }
+        } 
+        else {
+            if (word.length() + row > 15) return false;
+            flag &= verticalAdjacencyCheck(word, row, col); // does the word extend other letters?
+
+            for (int i = 0; i < word.length(); i++) {
+                if (board.getTile(row + i, col).getLetter() == ' ') {
+                    if (!horizontalAdjacencyCheck(String.valueOf(word.charAt(i)), row + i, col)) { // does each letter create new valid horizontal adjacent words
+                        return false;
+                    }
+                }
+                else if (isLetter(board.getTile(row+i, col).getLetter())) {
+                    existingLetter = true  ; // no blank tile so there must be a letter present to form word (technicall this is checked twice)
+                }
+            }
+        }
+        if (!existingLetter){
+            flag = false;
+        }
+        return flag;
+    }
 
     private boolean horizontalAdjacencyCheck(String word, int row, int col) {
         StringBuilder adjacent = new StringBuilder();
         int startCol = col;
-
-        while (startCol > 0 && board.getTile(row, startCol - 1).getLetter() != ' ') {
+        
+        while (startCol > 0 && board.getTile(row, startCol - 1).getLetter() != ' ') { // find starting letter index within row
             startCol--;
         }
-
+    
         for (int i = startCol; i < col; i++) {
-            adjacent.append(board.getTile(row, i).getLetter());
+            adjacent.append(board.getTile(row, i).getLetter()); // add extension left of new letter(s), if present
         }
-
-        adjacent.append(word);
-
+    
+        adjacent.append(word); // add newly placed letter(s)
+    
         for (int i = col + word.length(); i < 15; i++) {
             if (board.getTile(row, i).getLetter() == ' ') break;
-            adjacent.append(board.getTile(row, i).getLetter());
+            adjacent.append(board.getTile(row, i).getLetter()); // add letters to the right of new letter(s), if present 
         }
-
-        String formedWord = adjacent.toString().toLowerCase();
-        return check.isWord(formedWord);
+    
+        String formedWord = adjacent.toString().toLowerCase(); // form word as String
+        return check.isWord(formedWord); // check valid word, (single character words are valid)
     }
 
     private boolean verticalAdjacencyCheck(String word, int row, int col) {
         StringBuilder adjacent = new StringBuilder();
         int startRow = row;
-
-        while (startRow > 0 && board.getTile(startRow - 1, col).getLetter() != ' ') {
+    
+        while (startRow > 0 && board.getTile(startRow - 1, col).getLetter() != ' ') { // find starting letter index within col
             startRow--;
         }
-
+    
         for (int i = startRow; i < row; i++) {
-            adjacent.append(board.getTile(i, col).getLetter());
+            adjacent.append(board.getTile(i, col).getLetter()); // add extension above new word, if present
         }
-
-        adjacent.append(word);
-
+    
+        adjacent.append(word); // add newly placed letter(s)
+    
         for (int i = row + word.length(); i < 15; i++) {
             if (board.getTile(i, col).getLetter() == ' ') break;
-            adjacent.append(board.getTile(i, col).getLetter());
+            adjacent.append(board.getTile(i, col).getLetter()); // add letters below the new letter(s), if present
         }
-
-        String formedWord = adjacent.toString().toLowerCase();
-        return check.isWord(formedWord);
+    
+        String formedWord = adjacent.toString().toLowerCase(); // form word as String
+        return check.isWord(formedWord); //check valid word, (single character words are valid)
     }
 
     private void placeWord(String word, int row, int col, char direction, Player player) {
@@ -215,29 +235,32 @@ public class Game {
             char wordtile = word.charAt(i);
             Tile boardTile = (direction == 'H') ? board.getTile(row, col + i) : board.getTile(row + i, col); 
 
-            if (boardTile.getLetter() == ' ') { // If it's an empty space, place the tile
-                Tile newTile = player.removeTile(new Tile(wordtile)); // Remove from player hand
-                player.addTile(tilePile.deleteTile());
+            if (boardTile.getLetter() == ' ') { // If it's an empty space, place the tile (this is checked within canPlaceWord() as well)
+                Tile newTile = player.removeTile(new Tile(wordtile)); // remove from player rack
+                player.addTile(tilePile.deleteTile()); // take from tilePile (bag)
                 if (direction == 'H') {
                     board.setTile(row, col + i, newTile);
-                } else {
+                } else { // direction == 'V'
                     board.setTile(row + i, col, newTile);
                 }
             }
         }
+        addPoints(word, player);
+    }
+
+    public boolean isLetter(char c){ 
+        return Character.isLetter(c); // A-Z ?
+    }
+
+    private void addPoints(String word, Player player){ 
+        for (char letter : word.toCharArray()){
+            Tile tile = new Tile(letter);
+            player.addPoints(tile.getPoints());
+        }
     }
 
     public static void main(String[] args) {
-
         Game game = new Game();
-
-        game.initializeTiles();
-        game.initializePlayer();
-
-        System.out.println();
-
         game.play();
     }
-
-
 }
