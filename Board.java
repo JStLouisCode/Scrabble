@@ -7,6 +7,7 @@ public class Board {
     // Attributes
     private Tile[][] board = new Tile[15][15]; // A 15x15 grid of Tile objects representing the Scrabble board.
 
+
     // Constructor
 
     /**

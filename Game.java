@@ -1,4 +1,7 @@
 import java.util.*;
+import java.awt.*;
+import javax.swing.*;
+import java.awt.event.*;
 
 /**
  * The Game class manages the overall flow of the Scrabble game.
@@ -6,6 +9,8 @@ import java.util.*;
  */
 public class Game {
 
+    //
+    private JButton[][] buttons;
     // Attributes
 
     // The collection of tiles available in the game.
@@ -32,6 +37,7 @@ public class Game {
         this.initializePlayer();
         this.board = new Board(tilePile.deleteTile());
         this.check = new Word();
+
     }
 
     // Methods
