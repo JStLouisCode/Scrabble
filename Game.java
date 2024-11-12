@@ -25,6 +25,10 @@ public class Game {
     // Word validator that checks the validity of words against a dictionary.
     final private Word check;
 
+    //current player
+
+    private int currentPlayerIndex;
+
     // Constructor
 
     /**
@@ -171,7 +175,12 @@ public class Game {
 
             // Move to the next player
             currentPlayer = (currentPlayer + 1) % 4;
+            currentPlayerIndex = currentPlayer;
         }
+    }
+
+    public Player getCurrentPlayer() {
+        return player[currentPlayerIndex];
     }
 
     /**
