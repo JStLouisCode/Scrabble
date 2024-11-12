@@ -9,13 +9,13 @@ public class Game {
     // Attributes
 
     // The collection of tiles available in the game.
-    final private TilePile tilePile;
+    final public TilePile tilePile;
 
     // The array of players participating in the game.
     final private Player[] player;
 
     // Game board where words are placed.
-    final private Board board;
+    final public Board board;
 
     // Word validator that checks the validity of words against a dictionary.
     final private Word check;
@@ -88,7 +88,7 @@ public class Game {
      * @param scanner The scanner for user input.
      * @return An array with two integers representing the row and column.
      */
-    private int[] checkValidRowCol(Scanner scanner) {
+    public int[] checkValidRowCol(Scanner scanner) {
         int row = -1, col = -1;
         boolean validInput = false;
 
@@ -178,7 +178,7 @@ public class Game {
      * @param player The player attempting to place the word.
      * @return true if the word can be legally placed, false otherwise.
      */
-    private boolean canPlaceWord(String word, int row, int col, char direction, Player player) {
+    public boolean canPlaceWord(String word, int row, int col, char direction, Player player) {
         boolean flag = true;
 
         // out of bounds check
@@ -238,7 +238,7 @@ public class Game {
      * @param col The starting column of the word.
      * @return true if the word forms valid horizontal adjacent words, false otherwise.
      */
-    private boolean horizontalAdjacencyCheck(String word, int row, int col) {
+    public boolean horizontalAdjacencyCheck(String word, int row, int col) {
         StringBuilder adjacent = new StringBuilder();
         int startCol = col;
         
@@ -269,7 +269,7 @@ public class Game {
      * @param col The starting column of the word.
      * @return true if the word forms valid vertical adjacent words, false otherwise.
      */
-    private boolean verticalAdjacencyCheck(String word, int row, int col) {
+    public boolean verticalAdjacencyCheck(String word, int row, int col) {
         StringBuilder adjacent = new StringBuilder();
         int startRow = row;
     
@@ -301,7 +301,7 @@ public class Game {
      * @param direction The direction of the word: 'H' for horizontal, 'V' for vertical.
      * @param player The player placing the word.
      */
-    private void placeWord(String word, int row, int col, char direction, Player player) {
+    public void placeWord(String word, int row, int col, char direction, Player player) {
         for (int i = 0; i < word.length(); i++) {
             char wordtile = word.charAt(i);
             Tile boardTile = (direction == 'H') ? board.getTile(row, col + i) : board.getTile(row + i, col); 
@@ -325,7 +325,7 @@ public class Game {
      * @param word The word that was placed on the board.
      * @param player The player who placed the word and earned the points.
      */
-    private void addPoints(String word, Player player){ 
+    public void addPoints(String word, Player player){
         for (char letter : word.toCharArray()){
             Tile tile = new Tile(letter);
             player.addPoints(tile.getPoints());

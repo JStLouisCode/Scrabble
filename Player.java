@@ -136,11 +136,34 @@ public class Player {
     }
 
     /**
+     * Displays the player's hand by printing the tiles to the console.
+     */
+    public void clearHand(){
+        hand.clear();
+    }
+
+    /**
      * Adds points to the player's total score.
      *
      * @param add The number of points to add to the player's score.
      */
     public void addPoints(int add) {
         this.points += add;
+    }
+
+    /**
+     *
+     * @return this player's point count
+     */
+    public int getPoints() {
+        return points;
+    }
+
+    /**
+     *
+     * @return this player's point count
+     */
+    public void setPoints(int set) {
+        this.points = set;
     }
 }
