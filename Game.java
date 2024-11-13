@@ -28,6 +28,8 @@ public class Game {
     //current player
 
     private int currentPlayerIndex;
+    private int currentPlayer;
+
 
     // Constructor
 
@@ -177,6 +179,10 @@ public class Game {
             currentPlayer = (currentPlayer + 1) % 4;
             currentPlayerIndex = currentPlayer;
         }
+    }
+    public void  nextPlayer(){
+        currentPlayer = (currentPlayer + 1) % 4;
+        currentPlayerIndex = currentPlayer;
     }
 
     public Player getCurrentPlayer() {

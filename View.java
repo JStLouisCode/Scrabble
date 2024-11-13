@@ -6,10 +6,12 @@ class View {
     private CustomButton[][] buttons;
     private JPanel handPanel;
     private Game model;
+    private Word check;
 
     int clickedRow; // Since 'row' is accessible in this scope
     int clickedCol;
     private CustomButton[] selectedButtons;
+    String inputWord = "hello";
 
     boolean beforeStart = true;
 
@@ -18,6 +20,7 @@ class View {
 
     public View(Game model) {
         this.model = model;
+        this.check = new Word();
         model.initializeTiles();
         model.initializePlayer();
 
@@ -77,7 +80,20 @@ class View {
         submit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JOptionPane.showMessageDialog(frame,"MESSAGE");
+                if (check.isWord(inputWord)){
+                    //replace all used tiles
+
+                    model.nextPlayer();
+                    JOptionPane.showMessageDialog(frame,"it is now " + model.getCurrentPlayer().getName() + "'s turn");
+                    //replace hand with next players hand
+                    updateHandPanel();
+                    beforeStart = true;
+
+                }else{
+                    JOptionPane.showMessageDialog(frame,"invalid word please try again");
+                    //pickup all tiles placed
+
+                }
             }
         });
 
