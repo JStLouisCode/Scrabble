@@ -81,20 +81,21 @@ class View {
         submit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (check.isWord(inputWord)){
+                if (check.isWord(inputWord.toLowerCase())){
                     //replace all used tiles
-
+                    model.addPoints(inputWord, model.getCurrentPlayer());
                     model.nextPlayer();
-                    JOptionPane.showMessageDialog(frame,"submitted word: " + inputWord + " it is now " + model.getCurrentPlayer().getName() + "'s turn");
+                    JOptionPane.showMessageDialog(frame,"submitted word: " + inputWord + " it is now " + model.getCurrentPlayer().getName() + "'s turn, they have " + model.getCurrentPlayer().getPoints() + " points");
                     //replace hand with next players hand
                     updateHandPanel();
                     beforeStart = true;
                     inputWord = "";
 
+
                 }else{
                     JOptionPane.showMessageDialog(frame,"submitted word: " + inputWord +" invalid word please try again");
                     //pickup all tiles placed
-
+                    inputWord = "";
                 }
             }
         });
