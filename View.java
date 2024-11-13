@@ -6,37 +6,55 @@ class View {
     private JButton[][] buttons;
     private JPanel handPanel;
     private Game model;
+
+    int clickedRow; // Since 'row' is accessible in this scope
+    int clickedCol;
+
+    boolean beforeStart = true;
+
+    private Board board;
     private Tile selectedTile; // To store the selected tile from the hand
 
     public View(Game model) {
         this.model = model;
 
         buttons = new JButton[15][15];
+
         for (int row = 0; row < 15; row++) {
             for (int col = 0; col < 15; col++) {
                 buttons[row][col] = new JButton();
                 buttons[row][col].setPreferredSize(new
                         Dimension(25, 25));
 
+                buttons[row][col].setEnabled(false);
+
                 // Add the ActionListener directly to each button
-                int clickedRow = row; // Since 'row' is accessible in this scope
-                int clickedCol = col; // Since 'col' is accessible in this scope
+                clickedRow = row; // Since 'row' is accessible in this scope
+                clickedCol = col; // Since 'col' is accessible in this scope
                 buttons[row][col].addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         if (selectedTile != null) {
-                            model.placeTile(selectedTile, clickedRow, clickedCol);
+                            buttons[clickedRow][clickedCol].setText(String.valueOf(selectedTile.getLetter()));
+                            model.board.setTile(clickedRow, clickedCol, selectedTile);
                             selectedTile = null;
-                            //updateView();
+                            updateView();
                             updateHandPanel();
+
+                            for (int row = 0; row < 15; row++) {
+                                for (int col = 0; col < 15; col++) {
+                                    buttons[row][col].setEnabled(false);
+                                }
+                            }
                         }
                     }
+
                 });
             }
         }
 
         handPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        handPanel.setPreferredSize(new Dimension(600, 50));
+        handPanel.setPreferredSize(new Dimension(650, 50));
         updateHandPanel();
 
         JFrame frame = new JFrame();
@@ -51,6 +69,7 @@ class View {
         frame.add(container, BorderLayout.NORTH);
         frame.pack();
         frame.setVisible(true);
+        frame.setResizable(false);
     }
 
     public void updateHandPanel() {
@@ -64,11 +83,39 @@ class View {
 
                     char tileLetter = button.getText().charAt(0);
                     selectedTile = new Tile(tileLetter); // Store the selected tile
+                    for (int row = 0; row < 15; row++) {
+                        for (int col = 0; col < 15; col++) {
+                            buttons[row][col].setEnabled(false);
+                        }
+                    }
+
+
+                    if(clickedRow +1 != 15 && clickedCol + 1 != 15){
+                        buttons[clickedRow+1][clickedCol].setEnabled(true);
+                        buttons[clickedRow][clickedCol+1].setEnabled(true);
+                    }
+
                 }
             });
             handPanel.add(tileButton);
         }
         handPanel.revalidate();
         handPanel.repaint();
+    }
+
+
+    public void updateView() {
+        for (int row = 0; row < 15; row++) {
+            for (int col = 0; col < 15; col++) {
+                Tile tile = model.board.getTile(row, col); // Get the tile from the model's board
+                JButton button = buttons[row][col];
+
+                if (tile != null && tile.getLetter() != ' ') { // Check if the tile exists and is not blank
+                    button.setText(String.valueOf(tile.getLetter())); // Update button text with the tile's letter
+                } else {
+                    button.setText(""); // Clear the button if no tile is present or it's blank
+                }
+            }
+        }
     }
 }
