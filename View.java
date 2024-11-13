@@ -24,7 +24,7 @@ class View {
             for (int col = 0; col < 15; col++) {
                 buttons[row][col] = new CustomButton();
                 buttons[row][col].setPreferredSize(new
-                        Dimension(25, 25));
+                        Dimension(40, 25));
 
                 buttons[row][col].setEnabled(false);
                 buttons[row][col].setRow(row);
@@ -41,8 +41,11 @@ class View {
                 buttons[row][col].addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
+                        CustomButton clickedButton = (CustomButton) e.getSource();
                         if (selectedTile != null) {
-                            clickedRow = buttons
+                            clickedRow = clickedButton.getRow();
+                            clickedCol = clickedButton.getCol();
+
                             buttons[clickedRow][clickedCol].setText(String.valueOf(selectedTile.getLetter()));
                             model.board.setTile(clickedRow, clickedCol, selectedTile);
                             selectedTile = null;
