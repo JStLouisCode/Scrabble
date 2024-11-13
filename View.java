@@ -3,7 +3,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.util.Locale;
 class View {
-    private JButton[][] buttons;
+    private CustomButton[][] buttons;
     private JPanel handPanel;
     private Game model;
 
@@ -18,15 +18,22 @@ class View {
     public View(Game model) {
         this.model = model;
 
-        buttons = new JButton[15][15];
+        buttons = new CustomButton[15][15];
 
         for (int row = 0; row < 15; row++) {
             for (int col = 0; col < 15; col++) {
-                buttons[row][col] = new JButton();
+                buttons[row][col] = new CustomButton();
                 buttons[row][col].setPreferredSize(new
                         Dimension(25, 25));
 
                 buttons[row][col].setEnabled(false);
+                buttons[row][col].setRow(row);
+                buttons[row][col].setCol(col);
+
+
+                clickedRow = buttons[row][col].getRow();
+
+
 
                 // Add the ActionListener directly to each button
                 clickedRow = row; // Since 'row' is accessible in this scope
@@ -35,17 +42,15 @@ class View {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         if (selectedTile != null) {
+                            clickedRow = buttons
                             buttons[clickedRow][clickedCol].setText(String.valueOf(selectedTile.getLetter()));
                             model.board.setTile(clickedRow, clickedCol, selectedTile);
                             selectedTile = null;
                             updateView();
                             updateHandPanel();
 
-                            for (int row = 0; row < 15; row++) {
-                                for (int col = 0; col < 15; col++) {
-                                    buttons[row][col].setEnabled(false);
-                                }
-                            }
+
+                            disableButtons();
                         }
                     }
 
@@ -75,26 +80,25 @@ class View {
     public void updateHandPanel() {
         handPanel.removeAll();
         for (Tile tile : model.getCurrentPlayer().getHand()) {
-            JButton tileButton = new JButton(String.valueOf(tile.getLetter()));
+            CustomButton tileButton = new CustomButton(String.valueOf(tile.getLetter()));
             tileButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
-                    JButton button = (JButton) e.getSource();
+                    CustomButton button = (CustomButton) e.getSource();
 
                     char tileLetter = button.getText().charAt(0);
                     selectedTile = new Tile(tileLetter); // Store the selected tile
-                    for (int row = 0; row < 15; row++) {
-                        for (int col = 0; col < 15; col++) {
-                            buttons[row][col].setEnabled(false);
+
+                    if (beforeStart) {
+                        enableButtons();
+                    } else {
+                        disableButtons();
+                        if (clickedRow + 1 != 15 && clickedCol + 1 != 15) {
+                            buttons[clickedRow + 1][clickedCol].setEnabled(true);
+                            buttons[clickedRow][clickedCol + 1].setEnabled(true);
                         }
                     }
-
-
-                    if(clickedRow +1 != 15 && clickedCol + 1 != 15){
-                        buttons[clickedRow+1][clickedCol].setEnabled(true);
-                        buttons[clickedRow][clickedCol+1].setEnabled(true);
-                    }
-
+                    beforeStart = false;
                 }
             });
             handPanel.add(tileButton);
@@ -108,7 +112,7 @@ class View {
         for (int row = 0; row < 15; row++) {
             for (int col = 0; col < 15; col++) {
                 Tile tile = model.board.getTile(row, col); // Get the tile from the model's board
-                JButton button = buttons[row][col];
+                CustomButton button = buttons[row][col];
 
                 if (tile != null && tile.getLetter() != ' ') { // Check if the tile exists and is not blank
                     button.setText(String.valueOf(tile.getLetter())); // Update button text with the tile's letter
@@ -117,5 +121,22 @@ class View {
                 }
             }
         }
+    }
+
+    public void enableButtons() {
+        for (int row = 0; row < 15; row++) {
+            for (int col = 0; col < 15; col++) {
+                buttons[row][col].setEnabled(true);
+            }
+        }
+    }
+
+    public void disableButtons(){
+        for (int row = 0; row < 15; row++) {
+            for (int col = 0; col < 15; col++) {
+                buttons[row][col].setEnabled(false);
+            }
+        }
+
     }
 }
