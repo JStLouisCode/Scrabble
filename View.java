@@ -9,6 +9,7 @@ class View {
 
     int clickedRow; // Since 'row' is accessible in this scope
     int clickedCol;
+    private CustomButton[] selectedButtons;
 
     boolean beforeStart = true;
 
@@ -32,8 +33,6 @@ class View {
 
 
                 clickedRow = buttons[row][col].getRow();
-
-
 
                 // Add the ActionListener directly to each button
                 clickedRow = row; // Since 'row' is accessible in this scope
@@ -62,7 +61,7 @@ class View {
         }
 
         handPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
-        handPanel.setPreferredSize(new Dimension(650, 50));
+        handPanel.setPreferredSize(new Dimension(700, 50));
         updateHandPanel();
 
         JFrame frame = new JFrame();
