@@ -133,8 +133,17 @@ class View {
                     } else {
                         disableButtons();
                         if (clickedRow + 1 != 15 && clickedCol + 1 != 15) {
-                            buttons[clickedRow + 1][clickedCol].setEnabled(true);
-                            buttons[clickedRow][clickedCol + 1].setEnabled(true);
+                            if(!buttons[clickedRow + 1][clickedCol].getText().isEmpty()){
+                                buttons[clickedRow + 2][clickedCol].setEnabled(true);
+                            }
+                            else {
+                                buttons[clickedRow + 1][clickedCol].setEnabled(true);
+                            }
+                            if (!buttons[clickedRow][clickedCol + 1].getText().isEmpty()){
+                                buttons[clickedRow][clickedCol + 2].setEnabled(true);
+                            }
+                            else {buttons[clickedRow][clickedCol + 1].setEnabled(true);}
+
                         }
                     }
                     beforeStart = false;
