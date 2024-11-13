@@ -207,7 +207,7 @@ public class Game {
         for (int i = 0; i < word.length(); i++) {
             char currentChar = word.charAt(i);
             Tile boardTile = (direction == 'H') ? board.getTile(row, col + i) : board.getTile(row + i, col);
-            
+
             if (boardTile.getLetter() == ' ') {
                 continue;
             }
@@ -227,9 +227,9 @@ public class Game {
                     if (!verticalAdjacencyCheck(String.valueOf(word.charAt(i)), row, col + i)) { // does each letter create new valid vertical adjacent word
                         return false;
                     }
-                } 
+                }
             }
-        } 
+        }
         else {
             if (word.length() + row > 15) return false;
             flag &= verticalAdjacencyCheck(word, row, col); // does the word extend other letters?
@@ -256,22 +256,22 @@ public class Game {
     public boolean horizontalAdjacencyCheck(String word, int row, int col) {
         StringBuilder adjacent = new StringBuilder();
         int startCol = col;
-        
+
         while (startCol > 0 && board.getTile(row, startCol - 1).getLetter() != ' ') { // find starting letter index within row
             startCol--;
         }
-    
+
         for (int i = startCol; i < col; i++) {
             adjacent.append(board.getTile(row, i).getLetter()); // add extension left of new letter(s), if present
         }
-    
+
         adjacent.append(word); // add newly placed letter(s)
-    
+
         for (int i = col + word.length(); i < 15; i++) {
             if (board.getTile(row, i).getLetter() == ' ') break;
-            adjacent.append(board.getTile(row, i).getLetter()); // add letters to the right of new letter(s), if present 
+            adjacent.append(board.getTile(row, i).getLetter()); // add letters to the right of new letter(s), if present
         }
-    
+
         String formedWord = adjacent.toString().toLowerCase(); // form word as String
         return check.isWord(formedWord); // check valid word, (single character words are valid)
     }
@@ -287,22 +287,22 @@ public class Game {
     public boolean verticalAdjacencyCheck(String word, int row, int col) {
         StringBuilder adjacent = new StringBuilder();
         int startRow = row;
-    
+
         while (startRow > 0 && board.getTile(startRow - 1, col).getLetter() != ' ') { // find starting letter index within col
             startRow--;
         }
-    
+
         for (int i = startRow; i < row; i++) {
             adjacent.append(board.getTile(i, col).getLetter()); // add extension above new word, if present
         }
-    
+
         adjacent.append(word); // add newly placed letter(s)
-    
+
         for (int i = row + word.length(); i < 15; i++) {
             if (board.getTile(i, col).getLetter() == ' ') break;
             adjacent.append(board.getTile(i, col).getLetter()); // add letters below the new letter(s), if present
         }
-    
+
         String formedWord = adjacent.toString().toLowerCase(); // form word as String
         return check.isWord(formedWord); //check valid word, (single character words are valid)
     }
@@ -319,7 +319,7 @@ public class Game {
     public void placeWord(String word, int row, int col, char direction, Player player) {
         for (int i = 0; i < word.length(); i++) {
             char wordtile = word.charAt(i);
-            Tile boardTile = (direction == 'H') ? board.getTile(row, col + i) : board.getTile(row + i, col); 
+            Tile boardTile = (direction == 'H') ? board.getTile(row, col + i) : board.getTile(row + i, col);
 
             if (boardTile.getLetter() == ' ') { // If it's an empty space, place the tile (this is checked within canPlaceWord() as well)
                 Tile newTile = player.removeTile(new Tile(wordtile)); // remove from player rack
