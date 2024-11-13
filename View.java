@@ -11,7 +11,7 @@ class View {
     int clickedRow; // Since 'row' is accessible in this scope
     int clickedCol;
     private CustomButton[] selectedButtons;
-    String inputWord = "hello";
+    String inputWord = "";
 
     boolean beforeStart = true;
 
@@ -50,6 +50,7 @@ class View {
                             clickedCol = clickedButton.getCol();
 
                             buttons[clickedRow][clickedCol].setText(String.valueOf(selectedTile.getLetter()));
+                            inputWord = inputWord + selectedTile.getLetter();
                             model.board.setTile(clickedRow, clickedCol, selectedTile);
                             selectedTile = null;
                             updateView();
@@ -84,13 +85,14 @@ class View {
                     //replace all used tiles
 
                     model.nextPlayer();
-                    JOptionPane.showMessageDialog(frame,"it is now " + model.getCurrentPlayer().getName() + "'s turn");
+                    JOptionPane.showMessageDialog(frame,"submitted word: " + inputWord + " it is now " + model.getCurrentPlayer().getName() + "'s turn");
                     //replace hand with next players hand
                     updateHandPanel();
                     beforeStart = true;
+                    inputWord = "";
 
                 }else{
-                    JOptionPane.showMessageDialog(frame,"invalid word please try again");
+                    JOptionPane.showMessageDialog(frame,"submitted word: " + inputWord +" invalid word please try again");
                     //pickup all tiles placed
 
                 }
@@ -134,12 +136,14 @@ class View {
                         disableButtons();
                         if (clickedRow + 1 != 15 && clickedCol + 1 != 15) {
                             if(!buttons[clickedRow + 1][clickedCol].getText().isEmpty()){
+                                inputWord = inputWord + buttons[clickedRow + 1][clickedCol].getText();
                                 buttons[clickedRow + 2][clickedCol].setEnabled(true);
                             }
                             else {
                                 buttons[clickedRow + 1][clickedCol].setEnabled(true);
                             }
                             if (!buttons[clickedRow][clickedCol + 1].getText().isEmpty()){
+                                inputWord = inputWord + buttons[clickedRow][clickedCol+1].getText();
                                 buttons[clickedRow][clickedCol + 2].setEnabled(true);
                             }
                             else {buttons[clickedRow][clickedCol + 1].setEnabled(true);}
