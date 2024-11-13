@@ -18,15 +18,16 @@ class View {
 
     public View(Game model) {
         this.model = model;
+        model.initializeTiles();
+        model.initializePlayer();
 
         buttons = new CustomButton[15][15];
+
 
         for (int row = 0; row < 15; row++) {
             for (int col = 0; col < 15; col++) {
                 buttons[row][col] = new CustomButton();
-                buttons[row][col].setPreferredSize(new
-                        Dimension(40, 25));
-
+                buttons[row][col].setPreferredSize(new Dimension(40, 25));
                 buttons[row][col].setEnabled(false);
                 buttons[row][col].setRow(row);
                 buttons[row][col].setCol(col);
@@ -64,7 +65,24 @@ class View {
         handPanel.setPreferredSize(new Dimension(700, 50));
         updateHandPanel();
 
+        //Answer button
+        JPanel answer = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        answer.setPreferredSize(new Dimension(100,100));
+
+
         JFrame frame = new JFrame();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        JButton submit = new JButton("Submit");
+        submit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JOptionPane.showMessageDialog(frame,"MESSAGE");
+            }
+        });
+
+
+
         JPanel container = new JPanel(new GridLayout(15, 15, 0, 0));
         for (int row = 0; row < 15; row++) {
             for (int col = 0; col < 15; col++) {
@@ -74,10 +92,13 @@ class View {
 
         frame.add(handPanel, BorderLayout.SOUTH);
         frame.add(container, BorderLayout.NORTH);
+        frame.add(submit,BorderLayout.EAST);
         frame.pack();
         frame.setVisible(true);
         frame.setResizable(false);
+        updateView();
     }
+
 
     public void updateHandPanel() {
         handPanel.removeAll();
