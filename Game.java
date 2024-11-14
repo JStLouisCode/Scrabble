@@ -8,7 +8,7 @@ import java.awt.event.*;
  * It initializes the game components, handles player actions, word validation, and tile placement.
  */
 public class Game {
-
+    View view;
     //
     private JButton[][] buttons;
     // Attributes
@@ -17,7 +17,7 @@ public class Game {
     final public TilePile tilePile;
 
     // The array of players participating in the game.
-    final private Player[] player;
+    final public Player[] player;
 
     // Game board where words are placed.
     final public Board board;
@@ -43,7 +43,7 @@ public class Game {
         this.initializePlayer();
         this.board = new Board(tilePile.deleteTile());
         this.check = new Word();
-
+        this.view = new View(this);
     }
 
     // Methods
@@ -94,99 +94,24 @@ public class Game {
         }
     }
 
-    /**
-     * Validates user input for row and column, ensuring valid coordinates on the board.
-     *
-     * @param scanner The scanner for user input.
-     * @return An array with two integers representing the row and column.
-     */
-    public int[] checkValidRowCol(Scanner scanner) {
-        int row = -1, col = -1;
-        boolean validInput = false;
 
-        while (!validInput) {
-            try {
-                System.out.println("Enter starting row (1-15):");
-                row = Integer.parseInt(scanner.nextLine()) - 1; // Adjust for array indexing
-
-                System.out.println("Enter starting column (1-15):");
-                col = Integer.parseInt(scanner.nextLine()) - 1; // Adjust for array indexing
-
-                if (row >= 0 && row < 15 && col >= 0 && col < 15) {
-                    validInput = true;
-                } else {
-                    System.out.println("Invalid input. Please enter numbers between 1 and 15.");
-                }
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid input. Please enter a valid number.");
-            }
-        }
-        return new int[]{row, col};
-    }
 
     /**
      * Continuously manages player turns, collects input for word placement,
      * and updates the board until the game ends.
      */
-    public void play() {
-        System.out.println("Welcome to Scrabble! Here is the current board");
-        board.displayBoard();
-
-        Scanner scanner = new Scanner(System.in); // Input scanner
-
-        int currentPlayer = 0; // Track the current player
-        while (true) { // Infinite loop for continuous turns
-            System.out.println(player[currentPlayer].getName() + "'s turn:");
-            player[currentPlayer].displayHand();
-
-            // Get word
-            System.out.println("What word would you like to play?");
-            String word = scanner.nextLine().toUpperCase().trim();
-
-            // Check if the word is valid
-            if (!check.isWord(word.toLowerCase())) {
-                System.out.println("Invalid word, try again.");
-                continue; // Start the turn over
-            }
-
-            // Get direction of the word
-            char direction = ' ';
-            while (direction != 'V' && direction != 'H') {
-                System.out.println("Would you like to play the word vertically (V) or horizontally (H)?");
-                String input = scanner.nextLine().toUpperCase().trim();
-                if (input.length() > 0) { //ensure that the input is not empty
-                    direction = input.charAt(0);
-                }
-                if (direction != 'V' && direction != 'H') {
-                    System.out.println("Invalid direction. Please enter 'V' for vertical or 'H' for horizontal.");
-                }
-            }
-
-            int[] rowCol = checkValidRowCol(scanner);
-            int row = rowCol[0];
-            int col = rowCol[1];
-
-            // Validate word placement
-            if (canPlaceWord(word, row, col, direction, player[currentPlayer])) {
-                placeWord(word, row, col, direction, player[currentPlayer]);
-                board.displayBoard();
-            } else {
-                System.out.println("Invalid move, try again.");
-                continue; // Repeat the player's turn
-            }
-
-            // Move to the next player
-            currentPlayer = (currentPlayer + 1) % 4;
-            currentPlayerIndex = currentPlayer;
+    public void play(String word, char direction, int row, int col) {
+        if (!check.isWord(word.toLowerCase())) { // is the word valid in the wordbank
+            return;
         }
-    }
-    public void  nextPlayer(){
-        currentPlayer = (currentPlayer + 1) % 4;
-        currentPlayerIndex = currentPlayer;
-    }
 
-    public Player getCurrentPlayer() {
-        return player[currentPlayerIndex];
+        if (canPlaceWord(word, row, col, direction, player[currentPlayer])) { // can the word be legally placed
+            placeWord(word, row, col, direction, player[currentPlayer]); // place it
+            currentPlayer = (currentPlayer + 1) % 4;
+        }
+
+        currentPlayerIndex = currentPlayer;
+        view.updateView();
     }
 
     /**
@@ -353,13 +278,13 @@ public class Game {
         }
     }
 
-    /**
-     * The main entry point of the program.
-     *
-     * @param args Command line arguments.
-     */
-    public static void main(String[] args) {
-        Game game = new Game();
-        game.play();
+    public void  nextPlayer(){
+        currentPlayer = (currentPlayer + 1) % 4;
+        currentPlayerIndex = currentPlayer;
     }
+
+    public Player getCurrentPlayer() {
+        return player[currentPlayerIndex];
+    }
+
 }
