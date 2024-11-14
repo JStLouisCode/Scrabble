@@ -133,6 +133,12 @@ class View {
                     //pickup all tiles placed
                     updateView();
                 }
+
+                horizontalButton.setEnabled(true);
+                verticalButton.setEnabled(true);
+                if(isVertical){
+                    direction = 'V';
+                }else{direction = 'H';}
                 model.play(inputWord, direction, clickedRow, clickedCol);
                 beforeStart = true;
                 inputWord = "";
@@ -153,8 +159,8 @@ class View {
                 updateHandPanel();
                 beforeStart = true;
                 inputWord = "";
-
-
+                horizontalButton.setEnabled(true);
+                verticalButton.setEnabled(true);
                 updateView();
             }
         });
