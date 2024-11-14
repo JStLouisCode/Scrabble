@@ -3,6 +3,9 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.util.Locale;
 class View {
+
+    private JPanel directionPanel;
+    private boolean isVertical;
     private char direction = 'H';
     private CustomButton[][] buttons;
     private JPanel handPanel;
@@ -24,6 +27,39 @@ class View {
         this.check = new Word();
         model.initializeTiles();
         model.initializePlayer();
+
+        // Initialize hand panel
+        handPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        handPanel.setPreferredSize(new Dimension(700, 50));
+        updateHandPanel();
+
+        // Initialize the direction buttons
+        directionPanel = new JPanel(new GridLayout(2, 1));
+        JButton verticalButton = new JButton("Vertical");
+        JButton horizontalButton = new JButton("Horizontal");
+
+        verticalButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                isVertical = true;
+                verticalButton.setEnabled(false); // Disable after selecting vertical
+                horizontalButton.setEnabled(false); // Disable horizontal as well
+                updateEnabledTiles();
+            }
+        });
+
+        horizontalButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                isVertical = false;
+                horizontalButton.setEnabled(false); // Disable after selecting horizontal
+                verticalButton.setEnabled(false); // Disable vertical as well
+                updateEnabledTiles();
+            }
+        });
+
+        directionPanel.add(verticalButton);
+        directionPanel.add(horizontalButton);
 
         buttons = new CustomButton[15][15];
 
@@ -81,7 +117,8 @@ class View {
         submit.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                if (check.isWord(inputWord.toLowerCase())){
+
+                if (check.isWord(inputWord.toLowerCase()) && inputWord.length() > 1){
                     //replace all used tiles
                     model.addPoints(inputWord, model.getCurrentPlayer());
                     model.nextPlayer();
@@ -94,6 +131,7 @@ class View {
                 }else{
                     JOptionPane.showMessageDialog(frame,"submitted word: " + inputWord +" invalid word please try again");
                     //pickup all tiles placed
+                    updateView();
                 }
                 model.play(inputWord, direction, clickedRow, clickedCol);
                 beforeStart = true;
@@ -127,7 +165,10 @@ class View {
                 container.add(buttons[row][col]);
             }
         }
+
+
         frame.add(handPanel, BorderLayout.SOUTH);
+        frame.add(directionPanel, BorderLayout.WEST);
         frame.add(container, BorderLayout.NORTH);
         frame.add(submit);
         frame.add(skip,BorderLayout.EAST);
@@ -140,36 +181,22 @@ class View {
 
     public void updateHandPanel() {
         handPanel.removeAll();
+
         for (Tile tile : model.getCurrentPlayer().getHand()) {
             CustomButton tileButton = new CustomButton(String.valueOf(tile.getLetter()));
             tileButton.addActionListener(new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     CustomButton button = (CustomButton) e.getSource();
+                    button.setEnabled(false);
 
-                    char tileLetter = button.getText().charAt(0);
-                    selectedTile = new Tile(tileLetter); // Store the selected tile
+                    selectedTile = new Tile(button.getText().charAt(0)); // Store the selected tile
 
                     if (beforeStart) {
                         enableButtons();
                     } else {
                         disableButtons();
-                        if (clickedRow + 1 != 15 && clickedCol + 1 != 15) {
-                            if(!buttons[clickedRow + 1][clickedCol].getText().isEmpty()){
-                                inputWord = inputWord + buttons[clickedRow + 1][clickedCol].getText();
-                                
-                                buttons[clickedRow + 2][clickedCol].setEnabled(true);
-                            }
-                            else {
-                                buttons[clickedRow + 1][clickedCol].setEnabled(true);
-                            }
-                            if (!buttons[clickedRow][clickedCol + 1].getText().isEmpty()){
-                                inputWord = inputWord + buttons[clickedRow][clickedCol+1].getText();
-                                buttons[clickedRow][clickedCol + 2].setEnabled(true);
-                            }
-                            else {buttons[clickedRow][clickedCol + 1].setEnabled(true);}
-
-                        }
+                        updateEnabledTiles();
                     }
                     beforeStart = false;
                 }
@@ -178,6 +205,18 @@ class View {
         }
         handPanel.revalidate();
         handPanel.repaint();
+    }
+
+    public void updateEnabledTiles() {
+        if (isVertical) {
+            if (clickedRow + 1 < 15) {
+                buttons[clickedRow + 1][clickedCol].setEnabled(true); // Enable tile below for vertical
+            }
+        } else { // Horizontal
+            if (clickedCol + 1 < 15) {
+                buttons[clickedRow][clickedCol + 1].setEnabled(true); // Enable tile to the right for horizontal
+            }
+        }
     }
 
     public void updateView() {
