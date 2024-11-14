@@ -3,6 +3,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.util.Locale;
 class View {
+    private char direction = 'H';
     private CustomButton[][] buttons;
     private JPanel handPanel;
     private Game model;
@@ -87,16 +88,16 @@ class View {
                     JOptionPane.showMessageDialog(frame,"submitted word: " + inputWord + " it is now " + model.getCurrentPlayer().getName() + "'s turn, they have " + model.getCurrentPlayer().getPoints() + " points");
                     //replace hand with next players hand
                     updateHandPanel();
-                    beforeStart = true;
-                    inputWord = "";
+
 
 
                 }else{
                     JOptionPane.showMessageDialog(frame,"submitted word: " + inputWord +" invalid word please try again");
                     //pickup all tiles placed
-                    inputWord = "";
                 }
-                updateView();
+                model.play(inputWord, direction, clickedRow, clickedCol);
+                beforeStart = true;
+                inputWord = "";
             }
         });
 
