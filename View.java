@@ -156,6 +156,8 @@ class View {
                 updateHandPanel();
                 beforeStart = true;
                 inputWord = "";
+                horizontalButton.setEnabled(true);
+                verticalButton.setEnabled(true);
 
 
                 updateView();
@@ -213,12 +215,25 @@ class View {
     public void updateEnabledTiles() {
         if (isVertical) {
             if (clickedRow + 1 < 15) {
-                buttons[clickedRow + 1][clickedCol].setEnabled(true); // Enable tile below for vertical
+
+                if(!buttons[clickedRow + 1][clickedCol].getText().isEmpty()){
+                    buttons[clickedRow + 2][clickedCol].setEnabled(true);
+                    inputWord = inputWord + buttons[clickedRow+2][clickedCol].getText();
+
+                }
+                else {buttons[clickedRow + 1][clickedCol].setEnabled(true);} // Enable tile below for vertical
             }
         } else { // Horizontal
-            if (clickedCol + 1 < 15) {
-                buttons[clickedRow][clickedCol + 1].setEnabled(true); // Enable tile to the right for horizontal
-            }
+                if (clickedCol + 1 < 15) {
+                    if (!buttons[clickedRow][clickedCol + 1].getText().isEmpty()) {
+                        buttons[clickedRow][clickedCol + 2].setEnabled(true);
+                        inputWord = inputWord + buttons[clickedRow][clickedCol + 2].getText();
+                    } else {
+                        buttons[clickedRow][clickedCol + 1].setEnabled(true); // Enable tile to the right for horizontal}
+
+                    }
+                }
+
         }
     }
 
@@ -245,6 +260,7 @@ class View {
                 buttons[row][col].setEnabled(true);
             }
         }
+
     }
 
     public void disableButtons(){
