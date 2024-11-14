@@ -133,6 +133,9 @@ class View {
                     //pickup all tiles placed
                     updateView();
                 }
+
+                horizontalButton.setEnabled(true);
+                verticalButton.setEnabled(true);
                 model.play(inputWord, direction, clickedRow, clickedCol);
                 beforeStart = true;
                 inputWord = "";
