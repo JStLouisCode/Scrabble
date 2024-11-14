@@ -9,7 +9,7 @@ import java.awt.event.*;
  */
 public class Game {
     View view;
-    //
+
     private JButton[][] buttons;
     // Attributes
 
@@ -93,8 +93,6 @@ public class Game {
             }
         }
     }
-
-
 
     /**
      * Continuously manages player turns, collects input for word placement,

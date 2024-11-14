@@ -3,7 +3,6 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.util.Locale;
 class View {
-    private JPanel scorepanel;
     private CustomButton[][] buttons;
     private JPanel handPanel;
     private Game model;
@@ -26,14 +25,6 @@ class View {
         model.initializePlayer();
 
         buttons = new CustomButton[15][15];
-        scorepanel = new JPanel(new GridLayout(4, 1)); // 4 rows, 1 column, 5px vertical gap
-
-        // Create and add text fields to the panel
-        for (int i = 0; i < 4; i++) {
-            JTextField textField = new JTextField("Player " + i + ": "+ model.player[i].getPoints());
-            scorepanel.add(textField);
-        }
-
 
         for (int row = 0; row < 15; row++) {
             for (int col = 0; col < 15; col++) {
@@ -135,7 +126,6 @@ class View {
                 container.add(buttons[row][col]);
             }
         }
-        frame.add(scorepanel, BorderLayout.WEST);
         frame.add(handPanel, BorderLayout.SOUTH);
         frame.add(container, BorderLayout.NORTH);
         frame.add(submit);
@@ -200,11 +190,6 @@ class View {
                     buttons[row][col].setText("");
                 }
             }
-        }
-        scorepanel.removeAll();
-        for (int i = 0; i < 4; i++) {
-            JTextField textField = new JTextField("Player " + i + ": "+ model.player[i].getName());
-            scorepanel.add(textField);
         }
         frame.revalidate();
         frame.repaint();
