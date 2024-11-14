@@ -218,7 +218,7 @@ class View {
 
                 if(!buttons[clickedRow + 1][clickedCol].getText().isEmpty()){
                     buttons[clickedRow + 2][clickedCol].setEnabled(true);
-                    inputWord = inputWord + buttons[clickedRow+2][clickedCol].getText();
+                    inputWord = inputWord + buttons[clickedRow+1][clickedCol].getText();
 
                 }
                 else {buttons[clickedRow + 1][clickedCol].setEnabled(true);} // Enable tile below for vertical
@@ -227,7 +227,7 @@ class View {
                 if (clickedCol + 1 < 15) {
                     if (!buttons[clickedRow][clickedCol + 1].getText().isEmpty()) {
                         buttons[clickedRow][clickedCol + 2].setEnabled(true);
-                        inputWord = inputWord + buttons[clickedRow][clickedCol + 2].getText();
+                        inputWord = inputWord + buttons[clickedRow][clickedCol + 1].getText();
                     } else {
                         buttons[clickedRow][clickedCol + 1].setEnabled(true); // Enable tile to the right for horizontal}
 
