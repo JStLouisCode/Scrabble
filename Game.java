@@ -107,6 +107,7 @@ public class Game {
         if (canPlaceWord(word, row, col, direction, player[currentPlayer])) { // can the word be legally placed
             placeWord(word, row, col, direction, player[currentPlayer]); // place it
             currentPlayer = (currentPlayer + 1) % 4;
+            System.out.println("BIWEBFWIO");
         }
         currentPlayerIndex = currentPlayer;
         view.updateView();
@@ -247,21 +248,17 @@ public class Game {
      */
     public void placeWord(String word, int row, int col, char direction, Player player) {
         for (int i = 0; i < word.length(); i++) {
-            char wordtile = word.charAt(i);
-            Tile boardTile = (direction == 'H') ? board.getTile(row, col + i) : board.getTile(row + i, col);
+            char letter = word.charAt(i);
 
-            if (boardTile.getLetter() == ' ') { // If it's an empty space, place the tile (this is checked within canPlaceWord() as well)
-                Tile newTile = player.removeTile(new Tile(wordtile)); // remove from player rack
-                player.addTile(tilePile.deleteTile()); // take from tilePile (bag)
-                if (direction == 'H') {
-                    board.setTile(row, col + i, newTile);
-                } else { // direction == 'V'
-                    board.setTile(row + i, col, newTile);
-                }
+            if (direction == 'H') {
+                board.setTile(row, col + i-2, new Tile(letter));
+            } else if (direction == 'V') {
+                board.setTile(row + i-2, col, new Tile(letter));
             }
         }
-        addPoints(word, player);
+        view.updateView();
     }
+
 
     /**
      * Adds points to the player's total score based on the word placed on the board.

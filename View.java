@@ -121,21 +121,25 @@ class View {
                 if (check.isWord(inputWord.toLowerCase()) && inputWord.length() > 1){
                     //replace all used tiles
                     model.addPoints(inputWord, model.getCurrentPlayer());
-                    model.nextPlayer();
+
                     JOptionPane.showMessageDialog(frame,"submitted word: " + inputWord + " it is now " + model.getCurrentPlayer().getName() + "'s turn, they have " + model.getCurrentPlayer().getPoints() + " points");
                     //replace hand with next players hand
                     updateHandPanel();
 
-
-
                 }else{
-                    JOptionPane.showMessageDialog(frame,"submitted word: " + inputWord +" invalid word please try again");
+                    JOptionPane.showMessageDialog(frame,"tried to submitted word: " + inputWord +" invalid word please try again");
                     //pickup all tiles placed
                     updateView();
                 }
 
                 horizontalButton.setEnabled(true);
                 verticalButton.setEnabled(true);
+                if(isVertical){
+                    direction = 'V';
+                }else{
+                    direction = 'H';
+                }
+                System.out.println(inputWord);
                 model.play(inputWord, direction, clickedRow, clickedCol);
                 beforeStart = true;
                 inputWord = "";
@@ -150,7 +154,6 @@ class View {
             public void actionPerformed(ActionEvent e) {
 
                 model.addPoints(inputWord, model.getCurrentPlayer());
-                model.nextPlayer();
                 JOptionPane.showMessageDialog(frame,"skipping turn, it is now " + model.getCurrentPlayer().getName() + "'s turn, they have " + model.getCurrentPlayer().getPoints() + " points");
                 //replace hand with next players hand
                 updateHandPanel();
@@ -158,7 +161,7 @@ class View {
                 inputWord = "";
                 horizontalButton.setEnabled(true);
                 verticalButton.setEnabled(true);
-
+                model.nextPlayer();
 
                 updateView();
             }
@@ -224,15 +227,15 @@ class View {
                 else {buttons[clickedRow + 1][clickedCol].setEnabled(true);} // Enable tile below for vertical
             }
         } else { // Horizontal
-                if (clickedCol + 1 < 15) {
-                    if (!buttons[clickedRow][clickedCol + 1].getText().isEmpty()) {
-                        buttons[clickedRow][clickedCol + 2].setEnabled(true);
-                        inputWord = inputWord + buttons[clickedRow][clickedCol + 1].getText();
-                    } else {
-                        buttons[clickedRow][clickedCol + 1].setEnabled(true); // Enable tile to the right for horizontal}
+            if (clickedCol + 1 < 15) {
+                if (!buttons[clickedRow][clickedCol + 1].getText().isEmpty()) {
+                    buttons[clickedRow][clickedCol + 2].setEnabled(true);
+                    inputWord = inputWord + buttons[clickedRow][clickedCol + 1].getText();
+                } else {
+                    buttons[clickedRow][clickedCol + 1].setEnabled(true); // Enable tile to the right for horizontal}
 
-                    }
                 }
+            }
 
         }
     }
