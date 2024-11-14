@@ -1,4 +1,3 @@
-import org.junit.Test;
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -37,8 +36,6 @@ public class GameTest {
 
         game.tilePile.addTile(game.board.getTile(7,7).letter, 1);
         game.board.setTile(7,7, new Tile('I'));
-//        game.board.displayBoard();
-        player.displayHand();
     }
 
     /**
@@ -51,7 +48,6 @@ public class GameTest {
         System.out.println("The number of tests: " + counter);
         player.clearHand();
 //        game.board.displayBoard(); // debug or test visualization
-//        player.displayHand();
 
     }
 
