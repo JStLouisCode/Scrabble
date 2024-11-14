@@ -179,7 +179,6 @@ class View {
         handPanel.repaint();
     }
 
-
     public void updateView() {
         for (int row = 0; row < 15; row++) {
             for (int col = 0; col < 15; col++) {

@@ -8,7 +8,8 @@ import java.awt.event.*;
  * It initializes the game components, handles player actions, word validation, and tile placement.
  */
 public class Game {
-    View view;
+
+    private View view;
 
     private JButton[][] buttons;
     // Attributes
@@ -107,7 +108,6 @@ public class Game {
             placeWord(word, row, col, direction, player[currentPlayer]); // place it
             currentPlayer = (currentPlayer + 1) % 4;
         }
-
         currentPlayerIndex = currentPlayer;
         view.updateView();
     }
