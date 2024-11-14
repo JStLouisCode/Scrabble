@@ -7,7 +7,7 @@ class View {
     private JPanel handPanel;
     private Game model;
     private Word check;
-
+    private JFrame frame;
     int clickedRow; // Since 'row' is accessible in this scope
     int clickedCol;
     private CustomButton[] selectedButtons;
@@ -51,9 +51,9 @@ class View {
 
                             buttons[clickedRow][clickedCol].setText(String.valueOf(selectedTile.getLetter()));
                             inputWord = inputWord + selectedTile.getLetter();
-                            model.board.setTile(clickedRow, clickedCol, selectedTile);
+
                             selectedTile = null;
-                            updateView();
+
                             updateHandPanel();
 
 
@@ -74,7 +74,7 @@ class View {
         answer.setPreferredSize(new Dimension(100,100));
 
 
-        JFrame frame = new JFrame();
+        frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         JButton submit = new JButton("Submit");
@@ -97,6 +97,7 @@ class View {
                     //pickup all tiles placed
                     inputWord = "";
                 }
+                updateView();
             }
         });
 
@@ -164,16 +165,17 @@ class View {
     public void updateView() {
         for (int row = 0; row < 15; row++) {
             for (int col = 0; col < 15; col++) {
-                Tile tile = model.board.getTile(row, col); // Get the tile from the model's board
-                CustomButton button = buttons[row][col];
-
-                if (tile != null && tile.getLetter() != ' ') { // Check if the tile exists and is not blank
-                    button.setText(String.valueOf(tile.getLetter())); // Update button text with the tile's letter
+                Tile tile = model.board.getTile(row, col);
+                if (tile != null && tile.getLetter() != ' ') {
+                    buttons[row][col].setText(String.valueOf(tile.getLetter()));
                 } else {
-                    button.setText(""); // Clear the button if no tile is present or it's blank
+                    buttons[row][col].setText("");
                 }
             }
         }
+        frame.revalidate();
+        frame.repaint();
+
     }
 
     public void enableButtons() {
