@@ -101,7 +101,25 @@ class View {
             }
         });
 
+        JPanel skipPannel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        skipPannel.setPreferredSize(new Dimension(100,100));
+        JButton skip = new JButton("skip");
+        skip.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
 
+                model.addPoints(inputWord, model.getCurrentPlayer());
+                model.nextPlayer();
+                JOptionPane.showMessageDialog(frame,"skipping turn, it is now " + model.getCurrentPlayer().getName() + "'s turn, they have " + model.getCurrentPlayer().getPoints() + " points");
+                //replace hand with next players hand
+                updateHandPanel();
+                beforeStart = true;
+                inputWord = "";
+
+
+                updateView();
+            }
+        });
 
         JPanel container = new JPanel(new GridLayout(15, 15, 0, 0));
         for (int row = 0; row < 15; row++) {
@@ -112,7 +130,8 @@ class View {
 
         frame.add(handPanel, BorderLayout.SOUTH);
         frame.add(container, BorderLayout.NORTH);
-        frame.add(submit,BorderLayout.EAST);
+        frame.add(submit);
+        frame.add(skip,BorderLayout.EAST);
         frame.pack();
         frame.setVisible(true);
         frame.setResizable(false);
@@ -139,6 +158,7 @@ class View {
                         if (clickedRow + 1 != 15 && clickedCol + 1 != 15) {
                             if(!buttons[clickedRow + 1][clickedCol].getText().isEmpty()){
                                 inputWord = inputWord + buttons[clickedRow + 1][clickedCol].getText();
+                                
                                 buttons[clickedRow + 2][clickedCol].setEnabled(true);
                             }
                             else {
@@ -175,8 +195,9 @@ class View {
         }
         frame.revalidate();
         frame.repaint();
-
     }
+
+
 
     public void enableButtons() {
         for (int row = 0; row < 15; row++) {
