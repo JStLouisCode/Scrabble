@@ -1,3 +1,5 @@
+package src;
+
 /**
  * Tile class represents an individual letter tile in Scrabble.
  * Each tile has a letter and an associated point value according to Scrabble rules.

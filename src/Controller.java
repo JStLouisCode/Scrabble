@@ -1,3 +1,5 @@
+package src;
+
 public class Controller {
     private final Game model;
 

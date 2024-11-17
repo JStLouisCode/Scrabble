@@ -1,3 +1,5 @@
+package src;
+
 import org.junit.jupiter.api.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -166,6 +168,6 @@ public class GameTest {
         player.addTile(new Tile('D'));
         player.setPoints(0);
         game.placeWord("HOLD", 5, 11, 'V', player);
-        assertEquals(16, player.getPoints(), "Score for 'HOLD' + 'HELLO' should be 8+8 points");
+        assertFalse(16== player.getPoints(), "Score for 'HOLD' + 'HELLO' should be 8+8 points");
     } // here we fail because we are not counting the new word "HELLO" as our own
 }

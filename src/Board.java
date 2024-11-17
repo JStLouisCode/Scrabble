@@ -1,3 +1,5 @@
+package src;
+
 /**
  * Board class represents the Scrabble board, which is a 15x15 grid of tiles.
  * It initializes the board, displays it, and manages tiles at specific positions.

@@ -1,3 +1,5 @@
+package src;
+
 import java.util.*;
 import java.io.*;
 
@@ -32,7 +34,7 @@ public class Word {
      * If the file cannot be read, the IOException is caught and printed.
      */
     public void createWordBank(){
-        try (BufferedReader reader = new BufferedReader(new FileReader("WordBank.txt"))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader("src/WordBank.txt"))) {
             String line;
             while ((line = reader.readLine()) != null) {
                 wordBank.add(line.toLowerCase().trim());

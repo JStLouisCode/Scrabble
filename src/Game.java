@@ -1,3 +1,5 @@
+package src;
+
 import java.util.*;
 import java.awt.*;
 import javax.swing.*;
@@ -100,17 +102,16 @@ public class Game {
      * and updates the board until the game ends.
      */
     public void play(String word, char direction, int row, int col) {
-        if (!check.isWord(word.toLowerCase())) { // is the word valid in the wordbank
-            return;
-        }
-
-        if (canPlaceWord(word, row, col, direction, player[currentPlayer])) { // can the word be legally placed
-            placeWord(word, row, col, direction, player[currentPlayer]); // place it
-            currentPlayer = (currentPlayer + 1) % 4;
-            System.out.println("BIWEBFWIO");
-        }
-        currentPlayerIndex = currentPlayer;
-        view.updateView();
+//        if (!check.isWord(word.toLowerCase())) { // is the word valid in the wordbank
+//            return;
+//        }
+//
+//        if (canPlaceWord(word, row, col, direction, player[currentPlayer])) { // can the word be legally placed
+//            placeWord(word, row, col, direction, player[currentPlayer]); // place it
+//            currentPlayer = (currentPlayer + 1) % 4;
+//        }
+//        currentPlayerIndex = currentPlayer;
+//        view.updateView();
     }
 
     /**
@@ -248,16 +249,23 @@ public class Game {
      */
     public void placeWord(String word, int row, int col, char direction, Player player) {
         for (int i = 0; i < word.length(); i++) {
-            char letter = word.charAt(i);
+            char wordtile = word.charAt(i);
+            Tile boardTile = (direction == 'H') ? board.getTile(row, col + i) : board.getTile(row + i, col);
 
-            if (direction == 'H') {
-                board.setTile(row, col + i-2, new Tile(letter));
-            } else if (direction == 'V') {
-                board.setTile(row + i-2, col, new Tile(letter));
+            if (boardTile.getLetter() == ' ') { // If it's an empty space, place the tile (this is checked within canPlaceWord() as well)
+                Tile newTile = player.removeTile(new Tile(wordtile)); // remove from player rack
+                player.addTile(tilePile.deleteTile()); // take from tilePile (bag)
+                if (direction == 'H') {
+                    board.setTile(row, col + i, newTile);
+                } else { // direction == 'V'
+                    board.setTile(row + i, col, newTile);
+                }
             }
         }
-        view.updateView();
+        addPoints(word, player);
     }
+
+
 
 
     /**
