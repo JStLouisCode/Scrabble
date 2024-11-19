@@ -12,12 +12,17 @@ class View {
 
 
     private boolean isVertical;
+
+
     private char direction = 'H';
     private CustomButton[][] buttons;
 
     public CustomButton[][] getButtons() {
         return buttons;
     }
+    private JPanel skipPannel;
+    private JButton skip;
+    private JButton submit;
 
     public JPanel getHandPanel() {
         return handPanel;
@@ -51,6 +56,17 @@ class View {
     private JButton verticalButton;
     private JButton horizontalButton;
     private CustomButton tileButton;
+    public Game getModel(){
+        return model;
+    }
+    public char getDirection() {
+        return direction;
+    }
+
+    public void setDirection(char direction) {
+        this.direction = direction;
+    }
+
 
     public int getClickedRow() {
         return clickedRow;
@@ -75,11 +91,34 @@ class View {
     public void setVertical(boolean vertical) {
         isVertical = vertical;
     }
+    public boolean getVertical(){
+        return isVertical;
+    }
     public boolean getBeforeStart(){
         return beforeStart;
     }
     public void setBeforeStart(boolean input){
         beforeStart = input;
+    }
+
+    public void addInputWord(char letter){
+        inputWord = inputWord + letter;
+    }
+    public void setSelectedTile(Tile tile){
+        selectedTile = tile;
+    }
+    public JButton getSkip(){
+        return skip;
+    }
+    public JButton getSubmit(){
+        return submit;
+    }
+    public JFrame getFrame(){
+        return frame;
+    }
+
+    public void setInputWord(String inputWord) {
+        this.inputWord = inputWord;
     }
 
     /**
@@ -105,27 +144,6 @@ class View {
         directionPanel = new JPanel(new GridLayout(2, 1));
         verticalButton = new JButton("Vertical");
         horizontalButton = new JButton("Horizontal");
-
-        verticalButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                isVertical = true;
-                verticalButton.setEnabled(false); // Disable after selecting vertical
-                horizontalButton.setEnabled(false); // Disable horizontal as well
-                updateEnabledTiles();
-            }
-        });
-
-        horizontalButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                isVertical = false;
-                horizontalButton.setEnabled(false); // Disable after selecting horizontal
-                verticalButton.setEnabled(false); // Disable vertical as well
-                updateEnabledTiles();
-            }
-        });
-
         directionPanel.add(verticalButton);
         directionPanel.add(horizontalButton);
 
@@ -145,25 +163,7 @@ class View {
                 // Add the ActionListener directly to each button
                 clickedRow = row; // Since 'row' is accessible in this scope
                 clickedCol = col; // Since 'col' is accessible in this scope
-                buttons[row][col].addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        CustomButton clickedButton = (CustomButton) e.getSource();
-                        if (selectedTile != null) {
-                            clickedRow = clickedButton.getRow();
-                            clickedCol = clickedButton.getCol();
 
-                            buttons[clickedRow][clickedCol].setText(String.valueOf(selectedTile.getLetter()));
-                            inputWord = inputWord + selectedTile.getLetter();
-
-                            selectedTile = null;
-
-                            updateHandPanel();
-                            disableButtons();
-                        }
-                    }
-
-                });
             }
         }
 
@@ -179,62 +179,10 @@ class View {
         frame = new JFrame();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        JButton submit = new JButton("Submit");
-        submit.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                if (check.isWord(inputWord.toLowerCase()) && inputWord.length() > 1){
-                    //replace all used tiles
-                    model.addPoints(inputWord, model.getCurrentPlayer());
-
-                    JOptionPane.showMessageDialog(frame,"submitted word: " + inputWord + " it is now " + model.getCurrentPlayer().getName() + "'s turn, they have " + model.getCurrentPlayer().getPoints() + " points");
-                    //replace hand with next players hand
-                    model.play(inputWord, direction, clickedRow, clickedCol);
-                    model.placeWord(inputWord,  clickedRow, clickedCol, direction,model.getCurrentPlayer());
-
-                    updateHandPanel();
-
-                }else{
-                    JOptionPane.showMessageDialog(frame,"tried to submitted word: " + inputWord +" invalid word please try again");
-                    //pickup all tiles placed
-                    updateView();
-                }
-
-                horizontalButton.setEnabled(true);
-                verticalButton.setEnabled(true);
-                if(isVertical){
-                    direction = 'V';
-                }else{
-                    direction = 'H';
-                }
-                System.out.println(inputWord);
-
-                beforeStart = true;
-                inputWord = "";
-            }
-        });
-
-        JPanel skipPannel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        submit = new JButton("Submit");
+         skipPannel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         skipPannel.setPreferredSize(new Dimension(100,100));
-        JButton skip = new JButton("skip");
-        skip.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-
-                model.addPoints(inputWord, model.getCurrentPlayer());
-                model.nextPlayer();
-                JOptionPane.showMessageDialog(frame,"skipping turn, it is now " + model.getCurrentPlayer().getName() + "'s turn, they have " + model.getCurrentPlayer().getPoints() + " points");
-                //replace hand with next players hand
-                updateHandPanel();
-                beforeStart = true;
-                inputWord = "";
-
-                horizontalButton.setEnabled(true);
-                verticalButton.setEnabled(true);
-            }
-        });
-
+        skip = new JButton("skip");
         JPanel container = new JPanel(new GridLayout(15, 15, 0, 0));
         for (int row = 0; row < 15; row++) {
             for (int col = 0; col < 15; col++) {
