@@ -6,23 +6,81 @@ import java.awt.event.*;
 import java.util.Locale;
 class View {
 
+
     private JPanel directionPanel;
+
+
+
     private boolean isVertical;
     private char direction = 'H';
     private CustomButton[][] buttons;
+
+    public CustomButton[][] getButtons() {
+        return buttons;
+    }
+
+    public JPanel getHandPanel() {
+        return handPanel;
+    }
+
+    public String getInputWord() {
+        return inputWord;
+    }
+
+    public Tile getSelectedTile() {
+        return selectedTile;
+    }
+
     private JPanel handPanel;
     private Game model;
     private Word check;
     private JFrame frame;
+
+
+
     int clickedRow; // Since 'row' is accessible in this scope
     int clickedCol;
     private CustomButton[] selectedButtons;
     String inputWord = "";
 
-    boolean beforeStart = true;
+    private boolean beforeStart = true;
 
     private Board board;
     private Tile selectedTile; // To store the selected tile from the hand
+
+    private JButton verticalButton;
+    private JButton horizontalButton;
+    private CustomButton tileButton;
+
+    public int getClickedRow() {
+        return clickedRow;
+    }
+
+    public int getClickedCol() {
+        return clickedCol;
+    }
+    public void setClickedRow(int row){
+        clickedRow = row;
+    }
+    public void setClickedCol(int col){
+        clickedCol = col;
+    }
+    public JButton getVerticalButton() {
+        return verticalButton;
+    }
+
+    public JButton getHorizontalButton() {
+        return horizontalButton;
+    }
+    public void setVertical(boolean vertical) {
+        isVertical = vertical;
+    }
+    public boolean getBeforeStart(){
+        return beforeStart;
+    }
+    public void setBeforeStart(boolean input){
+        beforeStart = input;
+    }
 
     /**
      * Constructor for the View class.
@@ -30,6 +88,8 @@ class View {
      *
      * @param model The Game object representing the game model.
      */
+
+
     public View(Game model) {
         this.model = model;
         this.check = new Word();
@@ -43,8 +103,8 @@ class View {
 
         // Initialize the direction buttons
         directionPanel = new JPanel(new GridLayout(2, 1));
-        JButton verticalButton = new JButton("Vertical");
-        JButton horizontalButton = new JButton("Horizontal");
+        verticalButton = new JButton("Vertical");
+        horizontalButton = new JButton("Horizontal");
 
         verticalButton.addActionListener(new ActionListener() {
             @Override
@@ -194,6 +254,10 @@ class View {
         updateView();
     }
 
+    public CustomButton getTileButton() {
+        return tileButton;
+    }
+
     /**
      * Updates the hand panel with the current player's tiles.
      */
@@ -201,24 +265,8 @@ class View {
         handPanel.removeAll();
 
         for (Tile tile : model.getCurrentPlayer().getHand()) {
-            CustomButton tileButton = new CustomButton(String.valueOf(tile.getLetter()));
-            tileButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    CustomButton button = (CustomButton) e.getSource();
-                    button.setEnabled(false);
+            tileButton = new CustomButton(String.valueOf(tile.getLetter()));
 
-                    selectedTile = new Tile(button.getText().charAt(0)); // Store the selected tile
-
-                    if (beforeStart) {
-                        enableButtons();
-                    } else {
-                        disableButtons();
-                        updateEnabledTiles();
-                    }
-                    beforeStart = false;
-                }
-            });
             handPanel.add(tileButton);
         }
         handPanel.revalidate();
