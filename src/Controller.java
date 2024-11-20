@@ -8,6 +8,8 @@ public abstract class Controller implements ActionListener {
     private Game model;
     private View view;
     private Word check;
+    private CustomButton[][] button;
+
 
 
     public Controller() {
@@ -16,7 +18,7 @@ public abstract class Controller implements ActionListener {
 
         view.getVerticalButton().addActionListener(e->verticleButton());
         view.getHorizontalButton().addActionListener(e->horizontalButton());
-        CustomButton[][] button = view.getButtons();
+        button = view.getButtons();
         button[view.getClickedRow()][view.getClickedCol()].addActionListener(e->ClickedBoard());
         view.getSubmit().addActionListener(e->submitButton());
         view.getSkip().addActionListener(e->skip());
@@ -63,6 +65,29 @@ public abstract class Controller implements ActionListener {
             view.updateHandPanel();
             view.disableButtons();
         }
+        if (view.getSelectedTile() != null) {
+
+
+            if(view.getFirstLetter()){ // if this is the first letter added
+                view.setTargetRow(clickedButton.getRow());
+                view.setTargetCol(clickedButton.getCol());
+                if(view.getVertical()){
+                    if(model.getBoard().getTile(view.getTargetRow() - 1, view.getTargetCol()).getLetter() != ' '){
+                        String temp = Character.toString(view.getSelectedTile().getLetter());
+                        view.setTargetRow(view.getTargetRow() - 1);
+                        view.setInputWord(model.getBoard().getTile(view.getTargetRow(), view.getTargetCol()).getLetter() + temp);
+                    }
+                } else {
+                    if(model.getBoard().getTile(view.getTargetRow() , view.getTargetCol() - 1).getLetter() != ' '){
+                        String temp = Character.toString(view.getSelectedTile().getLetter());
+                        view.setTargetCol(view.getTargetCol() - 1);
+                        view.setInputWord(model.getBoard().getTile(view.getTargetRow(), view.getTargetCol()).getLetter() + temp);
+                    }
+                }
+                view.setFirstLetter(false);
+            } else {
+                view.addInputWord(view.getSelectedTile().getLetter());
+            }
     }
 
     public void submitButton(ActionEvent e) {
