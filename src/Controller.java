@@ -7,13 +7,13 @@ import java.awt.event.ActionListener;
 public abstract class Controller implements ActionListener {
     private Game model;
     private View view;
-    private Word check;
+
 
 
     public Controller() {
         model = new Game();
-        view = new View(model);
-        view.updateHandPanel();
+        this.view = model.getView();
+
         view.getVerticalButton().addActionListener(e->verticleButton());
         view.getHorizontalButton().addActionListener(e->horizontalButton());
         CustomButton[][] button = view.getButtons();
@@ -25,7 +25,7 @@ public abstract class Controller implements ActionListener {
         view.getSubmit().addActionListener(this::submitButton);
         view.getSkip().addActionListener(this::skip);
         for (int i = 0; i < 7; i++) {
-                view.getDisplayHand()[i].addActionListener(this::tileButton);
+                view.getDisplayHand(i).addActionListener(this::tileButton);
         }
     }
 
@@ -92,7 +92,7 @@ public abstract class Controller implements ActionListener {
 
     public void submitButton(ActionEvent e) {
 
-        if (check.isWord(view.getInputWord().toLowerCase()) && view.getInputWord().length() > 1){
+        if (model.getCheck().isWord(view.getInputWord().toLowerCase()) && view.getInputWord().length() > 1){
             //replace all used tiles
             model.addPoints(view.getInputWord(), model.getCurrentPlayer());
 

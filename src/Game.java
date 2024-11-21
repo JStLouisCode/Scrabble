@@ -30,8 +30,8 @@ public class Game {
 
     //current player
 
-    private int currentPlayerIndex = 0;
-    private int currentPlayer = 0;
+    private int currentPlayerIndex = 1;
+    private int currentPlayer = 1;
 
 
     // Constructor
@@ -294,4 +294,11 @@ public class Game {
         return this.board;
     }
 
+    public Word getCheck(){
+        return check;
+    }
+
+    public View getView(){
+        return view;
+    }
 }

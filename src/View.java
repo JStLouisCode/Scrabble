@@ -95,7 +95,6 @@ class View {
         this.direction = direction;
     }
 
-
     public int getClickedRow() {
         return clickedRow;
     }
@@ -244,6 +243,7 @@ class View {
             tileButton = new CustomButton(String.valueOf(tile.getLetter()));
             displayHand[i] = tileButton;
             handPanel.add(tileButton);
+            i++;
         }
         handPanel.revalidate();
         handPanel.repaint();
@@ -318,8 +318,8 @@ class View {
 
     }
 
-    public CustomButton[] getDisplayHand() {
-        return displayHand;
+    public CustomButton getDisplayHand(int i) {
+        return displayHand[i];
     }
 
 
