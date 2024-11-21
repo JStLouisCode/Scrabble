@@ -17,10 +17,9 @@ public abstract class Controller implements ActionListener {
         view.getVerticalButton().addActionListener(e->verticleButton());
         view.getHorizontalButton().addActionListener(e->horizontalButton());
         CustomButton[][] button = view.getButtons();
-        button[view.getClickedRow()][view.getClickedCol()].addActionListener(e->ClickedBoard());
-        view.getSubmit().addActionListener(e->submitButton());
-        view.getSkip().addActionListener(e->skip());
-        view.getTileButton().addActionListener(e->tileButton(e->));
+        button[view.getClickedRow()][view.getClickedCol()].addActionListener(this::clickedBoard);
+        view.getSubmit().addActionListener(this::submitButton);
+        view.getSkip().addActionListener(this::skip);
     }
 
 
@@ -51,7 +50,7 @@ public abstract class Controller implements ActionListener {
         view.setBeforeStart(false);
     }
 
-    public void ClickedBoard (ActionEvent e){
+    public void clickedBoard (ActionEvent e){
         CustomButton clickedButton = (CustomButton) e.getSource();
         CustomButton[][] button = view.getButtons();
         if (view.getSelectedTile() != null) {
@@ -109,20 +108,7 @@ public abstract class Controller implements ActionListener {
         view.updateView();
     }
 
-    public void HandButton(ActionEvent e) {
-        CustomButton button = (CustomButton) e.getSource();
-        button.setEnabled(false);
 
-        view.setSelectedTile(new Tile(button.getText().charAt(0))); // Store the selected tile
-
-        if (view.getBeforeStart()) {
-            view.enableButtons();
-        } else {
-            view.disableButtons();
-            view.updateEnabledTiles();
-        }
-        view.setBeforeStart(false);
-    }
     public static void main(String[] args) {
         Controller controller = new Controller() {
             @Override
