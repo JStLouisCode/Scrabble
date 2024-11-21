@@ -8,8 +8,9 @@ class View {
 
 
     private JPanel directionPanel;
-
-
+    private int targetRow;
+    private int targetCol;
+    private boolean first_letter = true; // is the current player placing their first tile
 
     private boolean isVertical;
 
@@ -56,6 +57,31 @@ class View {
     private JButton verticalButton;
     private JButton horizontalButton;
     private CustomButton tileButton;
+
+    public int getTargetRow() {
+        return targetRow;
+    }
+
+    public int getTargetCol() {
+        return targetCol;
+    }
+
+    public boolean getFirstLetter() {
+        return first_letter;
+    }
+
+    public void setFirstLetter(boolean bool) {
+        first_letter = bool;
+    }
+
+    public void setTargetRow(int row) {
+        targetRow = row;
+    }
+
+    public void setTargetCol(int col) {
+        targetCol = col;
+    }
+
     public Game getModel(){
         return model;
     }

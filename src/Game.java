@@ -23,7 +23,7 @@ public class Game {
     final public Player[] player;
 
     // Game board where words are placed.
-    final public Board board;
+    final private Board board;
 
     // Word validator that checks the validity of words against a dictionary.
     final private Word check;
@@ -288,6 +288,10 @@ public class Game {
 
     public Player getCurrentPlayer() {
         return player[currentPlayerIndex];
+    }
+
+    public Board getBoard() {
+        return this.board;
     }
 
 }
