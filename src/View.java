@@ -257,10 +257,8 @@ class View {
 
                 beforeStart = false; // Placement has started
             });
-
             handPanel.add(tileButton); // Add the button to the panel
         }
-
         handPanel.revalidate();
         handPanel.repaint();
     }
@@ -287,7 +285,6 @@ class View {
                     inputWord = inputWord + buttons[clickedRow][clickedCol + 1].getText();
                 } else {
                     buttons[clickedRow][clickedCol + 1].setEnabled(true); // Enable tile to the right for horizontal}
-
                 }
             }
 

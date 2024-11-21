@@ -250,15 +250,13 @@ public class Game {
     public void placeWord(String word, int row, int col, char direction, Player player, int wordLen) {
         for (int i = 0; i < word.length(); i++) {
             char wordtile = word.charAt(i);
-            Tile boardTile = (direction == 'H') ? board.getTile(row, col + i) : board.getTile(row + i, col);
-
 
             Tile newTile = player.removeTile(new Tile(wordtile)); // remove from player rack
             player.addTile(tilePile.deleteTile()); // take from tilePile (bag)
             if (direction == 'H') {
-                board.setTile(row, col + i-wordLen, newTile);
+                board.setTile(row, col + i-wordLen+1, newTile);
             } else { // direction == 'V'
-                board.setTile(row + i-wordLen, col, newTile);
+                board.setTile(row + i-wordLen+1, col, newTile);
             }
 
         }
