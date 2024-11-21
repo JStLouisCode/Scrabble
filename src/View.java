@@ -281,7 +281,7 @@ class View {
     public void updateView() {
         for (int row = 0; row < 15; row++) {
             for (int col = 0; col < 15; col++) {
-                Tile tile = model.board.getTile(row, col);
+                Tile tile = model.getBoard().getTile(row, col);
                 if (tile != null && tile.getLetter() != ' ') {
                     buttons[row][col].setText(String.valueOf(tile.getLetter()));
                 } else {

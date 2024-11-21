@@ -36,8 +36,8 @@ public class GameTest {
         game.initializeTiles();
         game.initializePlayer();
 
-        game.tilePile.addTile(game.board.getTile(7,7).letter, 1);
-        game.board.setTile(7,7, new Tile('I'));
+        game.tilePile.addTile(game.getBoard().getTile(7,7).letter, 1);
+        game.getBoard().setTile(7,7, new Tile('I'));
     }
 
     /**
@@ -82,8 +82,8 @@ public class GameTest {
         game.placeWord("HELL", 6, 7, 'H', player);
 
 
-        assertEquals('H', game.board.getTile(6, 7).getLetter(), "Should be H");
-        assertEquals('L', game.board.getTile(6, 10).getLetter(), "Should be L");
+        assertEquals('H', game.getBoard().getTile(6, 7).getLetter(), "Should be H");
+        assertEquals('L', game.getBoard().getTile(6, 10).getLetter(), "Should be L");
     }
 
     /**
