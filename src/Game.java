@@ -30,8 +30,8 @@ public class Game {
 
     //current player
 
-    private int currentPlayerIndex;
-    private int currentPlayer;
+    private int currentPlayerIndex = 0;
+    private int currentPlayer = 0;
 
 
     // Constructor

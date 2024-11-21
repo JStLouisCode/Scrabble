@@ -13,13 +13,20 @@ public abstract class Controller implements ActionListener {
     public Controller() {
         model = new Game();
         view = new View(model);
-
+        view.updateHandPanel();
         view.getVerticalButton().addActionListener(e->verticleButton());
         view.getHorizontalButton().addActionListener(e->horizontalButton());
         CustomButton[][] button = view.getButtons();
-        button[view.getClickedRow()][view.getClickedCol()].addActionListener(this::clickedBoard);
+        for (int row = 0; row < 15; row++) {
+            for (int col = 0; col < 15; col++) {
+                button[row][col].addActionListener(this::clickedBoard);
+            }
+        }
         view.getSubmit().addActionListener(this::submitButton);
         view.getSkip().addActionListener(this::skip);
+        for (int i = 0; i < 7; i++) {
+                view.getDisplayHand()[i].addActionListener(this::tileButton);
+        }
     }
 
 
@@ -33,7 +40,7 @@ public abstract class Controller implements ActionListener {
     private void horizontalButton() {
         view.setVertical(false);
         view.getVerticalButton().setEnabled(false); // Disable after selecting horizontal
-        view.getVerticalButton().setEnabled(false); // Disable vertical as well
+        view.getHorizontalButton().setEnabled(false); // Disable vertical as well
         view.updateEnabledTiles();
     }
 
@@ -50,14 +57,33 @@ public abstract class Controller implements ActionListener {
         view.setBeforeStart(false);
     }
 
-    public void clickedBoard (ActionEvent e){
+    public void clickedBoard (ActionEvent e) {
         CustomButton clickedButton = (CustomButton) e.getSource();
         CustomButton[][] button = view.getButtons();
         if (view.getSelectedTile() != null) {
             view.setClickedRow(clickedButton.getRow());
             view.setClickedCol(clickedButton.getCol());
             button[view.getClickedRow()][view.getClickedCol()].setText(String.valueOf(view.getSelectedTile().getLetter()));
-            view.addInputWord(view.getSelectedTile().getLetter());
+            if (view.getFirstLetter()) { // if this is the first letter added
+                view.setTargetRow(clickedButton.getRow());
+                view.setTargetCol(clickedButton.getCol());
+                if (view.getVertical()) {
+                    if (model.getBoard().getTile(view.getTargetRow() - 1, view.getTargetCol()).getLetter() != ' ') {
+                        String temp = Character.toString(view.getSelectedTile().getLetter());
+                        view.setTargetRow(view.getTargetRow() - 1);
+                        view.setInputWord(model.getBoard().getTile(view.getTargetRow(), view.getTargetCol()).getLetter() + temp);
+                    }
+                } else {
+                    if (model.getBoard().getTile(view.getTargetRow(), view.getTargetCol() - 1).getLetter() != ' ') {
+                        String temp = Character.toString(view.getSelectedTile().getLetter());
+                        view.setTargetCol(view.getTargetCol() - 1);
+                        view.setInputWord(model.getBoard().getTile(view.getTargetRow(), view.getTargetCol()).getLetter() + temp);
+                    }
+                }
+                view.setFirstLetter(false);
+            } else {
+                view.addInputWord(view.getSelectedTile().getLetter());
+            }
             view.setSelectedTile(null);
             view.updateHandPanel();
             view.disableButtons();

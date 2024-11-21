@@ -14,6 +14,7 @@ class View {
 
     private boolean isVertical;
 
+    private CustomButton [] displayHand;
 
     private char direction = 'H';
     private CustomButton[][] buttons;
@@ -21,6 +22,7 @@ class View {
     public CustomButton[][] getButtons() {
         return buttons;
     }
+
     private JPanel skipPannel;
     private JButton skip;
     private JButton submit;
@@ -46,7 +48,7 @@ class View {
 
     int clickedRow; // Since 'row' is accessible in this scope
     int clickedCol;
-    private CustomButton[] selectedButtons;
+
     String inputWord = "";
 
     private boolean beforeStart = true;
@@ -160,7 +162,7 @@ class View {
         this.check = new Word();
         model.initializeTiles();
         model.initializePlayer();
-
+        displayHand= new CustomButton[7];
         // Initialize hand panel
         handPanel = new JPanel(new FlowLayout(FlowLayout.CENTER));
         handPanel.setPreferredSize(new Dimension(700, 50));
@@ -237,10 +239,10 @@ class View {
      */
     public void updateHandPanel() {
         handPanel.removeAll();
-
+        int i = 0;
         for (Tile tile : model.getCurrentPlayer().getHand()) {
             tileButton = new CustomButton(String.valueOf(tile.getLetter()));
-
+            displayHand[i] = tileButton;
             handPanel.add(tileButton);
         }
         handPanel.revalidate();
@@ -303,7 +305,6 @@ class View {
                 buttons[row][col].setEnabled(true);
             }
         }
-
     }
     /**
      * Disables all buttons on the board after a tile is placed.
@@ -316,4 +317,10 @@ class View {
         }
 
     }
+
+    public CustomButton[] getDisplayHand() {
+        return displayHand;
+    }
+
+
 }
