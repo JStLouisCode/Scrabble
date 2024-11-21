@@ -139,7 +139,7 @@ public abstract class Controller implements ActionListener {
         view.getHorizontalButton().setEnabled(true);
         view.getVerticalButton().setEnabled(true);
         model.nextPlayer();
-
+        view.updateHandPanel();
         view.updateView();
     }
 
