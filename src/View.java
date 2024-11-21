@@ -318,7 +318,7 @@ class View {
 
     }
 
-    public CustomButton getDisplayHand(int i) {
+    public CustomButton getDisplayHandTile(int i) {
         return displayHand[i];
     }
 

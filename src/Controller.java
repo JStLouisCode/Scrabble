@@ -25,7 +25,7 @@ public abstract class Controller implements ActionListener {
         view.getSubmit().addActionListener(this::submitButton);
         view.getSkip().addActionListener(this::skip);
         for (int i = 0; i < 7; i++) {
-                view.getDisplayHand(i).addActionListener(this::tileButton);
+                view.getDisplayHandTile(i).addActionListener(this::tileButton);
         }
     }
 
