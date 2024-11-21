@@ -207,7 +207,7 @@ class View {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         submit = new JButton("Submit");
-         skipPannel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        skipPannel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         skipPannel.setPreferredSize(new Dimension(100,100));
         skip = new JButton("skip");
         JPanel container = new JPanel(new GridLayout(15, 15, 0, 0));
@@ -238,16 +238,33 @@ class View {
      */
     public void updateHandPanel() {
         handPanel.removeAll();
-        int i = 0;
+
+        // Add buttons for each tile in the current player's hand
         for (Tile tile : model.getCurrentPlayer().getHand()) {
-            tileButton = new CustomButton(String.valueOf(tile.getLetter()));
-            displayHand[i] = tileButton;
-            handPanel.add(tileButton);
-            i++;
+            CustomButton tileButton = new CustomButton(String.valueOf(tile.getLetter()));
+
+            // Inline event listener for selecting a tile
+            tileButton.addActionListener(e -> {
+                tileButton.setEnabled(false); // Disable the selected tile
+                selectedTile = new Tile(tileButton.getText().charAt(0)); // Store the selected tile
+
+                if (beforeStart) {
+                    enableButtons(); // Allow board placement
+                } else {
+                    disableButtons();
+                    updateEnabledTiles();
+                }
+
+                beforeStart = false; // Placement has started
+            });
+
+            handPanel.add(tileButton); // Add the button to the panel
         }
+
         handPanel.revalidate();
         handPanel.repaint();
     }
+
 
     /**
      * Enables tiles for the next placement based on the selected direction.
@@ -321,6 +338,4 @@ class View {
     public CustomButton getDisplayHandTile(int i) {
         return displayHand[i];
     }
-
-
 }

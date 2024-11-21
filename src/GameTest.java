@@ -79,7 +79,7 @@ public class GameTest {
         boolean canPlace = game.canPlaceWord("HELL", 6, 7, 'H', player); // row 7 col 8
 
         assertTrue(canPlace, "Should be able to place 'HELL' horizontally at (7, 8)");
-        game.placeWord("HELL", 6, 7, 'H', player);
+        game.placeWord("HELL", 6, 7, 'H', player,4);
 
 
         assertEquals('H', game.getBoard().getTile(6, 7).getLetter(), "Should be H");
@@ -135,7 +135,7 @@ public class GameTest {
         player.addTile(new Tile('H'));
         player.setPoints(0);
 
-        game.placeWord("HI", 6, 7, 'V', player);
+        game.placeWord("HI", 6, 7, 'V', player,2);
         assertEquals(5, player.getPoints(), "Score for 'HI' should be 5 points (H=4, I=1)");
     }
 
@@ -151,7 +151,7 @@ public class GameTest {
         player.addTile(new Tile('I'));
         player.addTile(new Tile('Z'));
 
-        game.placeWord("QUIZ", 7, 5, 'H', player);
+        game.placeWord("QUIZ", 7, 5, 'H', player,4);
         assertEquals(22, player.getPoints(), "Score for 'QUIZ' should be 22 points (Q=10, U=1, I=1, Z=10)");
     }
 
@@ -167,7 +167,7 @@ public class GameTest {
         player.addTile(new Tile('L'));
         player.addTile(new Tile('D'));
         player.setPoints(0);
-        game.placeWord("HOLD", 5, 11, 'V', player);
+        game.placeWord("HOLD", 5, 11, 'V', player,4);
         assertFalse(16== player.getPoints(), "Score for 'HOLD' + 'HELLO' should be 8+8 points");
     } // here we fail because we are not counting the new word "HELLO" as our own
 }

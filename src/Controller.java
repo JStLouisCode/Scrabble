@@ -24,9 +24,12 @@ public abstract class Controller implements ActionListener {
         }
         view.getSubmit().addActionListener(this::submitButton);
         view.getSkip().addActionListener(this::skip);
-        for (int i = 0; i < 7; i++) {
-                view.getDisplayHandTile(i).addActionListener(this::tileButton);
+        for (Tile tile: model.getCurrentPlayer().getHand()) {
+            CustomButton tileButton = new CustomButton(String.valueOf(tile.getLetter()));
+            tileButton.addActionListener(this::handButton);
         }
+        view.getHandPanel().revalidate();
+        view.getHandPanel().repaint();
     }
 
 
@@ -35,19 +38,22 @@ public abstract class Controller implements ActionListener {
         view.setVertical(true);
         view.getVerticalButton().setEnabled(false); // Disable after selecting vertical
         view.getHorizontalButton().setEnabled(false); // Disable horizontal as well
+        view.setDirection('V');
         view.updateEnabledTiles();
     }
     private void horizontalButton() {
         view.setVertical(false);
         view.getVerticalButton().setEnabled(false); // Disable after selecting horizontal
         view.getHorizontalButton().setEnabled(false); // Disable vertical as well
+        view.setDirection('H');
         view.updateEnabledTiles();
     }
 
-    public void tileButton (ActionEvent e){
+    public void handButton (ActionEvent e){
         CustomButton button = (CustomButton) e.getSource();
         button.setEnabled(false);
         view.setSelectedTile(new Tile(button.getText().charAt(0)));// Store the selected tile
+        System.out.println(view.getSelectedTile());
         if (view.getBeforeStart()) {
             view.enableButtons();
         } else {
@@ -101,8 +107,10 @@ public abstract class Controller implements ActionListener {
             //replace all used tiles
             model.addPoints(view.getInputWord(), model.getCurrentPlayer());
 
+            model.placeWord(view.getInputWord(), view.clickedRow, view.clickedCol, view.getDirection(), model.getCurrentPlayer(), view.getInputWord().length());
             JOptionPane.showMessageDialog(view.getFrame(),"submitted word: " + view.getInputWord() + " it is now " + model.getCurrentPlayer().getName() + "'s turn, they have " + model.getCurrentPlayer().getPoints() + " points");
             //replace hand with next players hand
+            model.nextPlayer();
             view.updateHandPanel();
 
         }else{

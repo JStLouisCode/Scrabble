@@ -247,20 +247,20 @@ public class Game {
      * @param direction The direction of the word: 'H' for horizontal, 'V' for vertical.
      * @param player The player placing the word.
      */
-    public void placeWord(String word, int row, int col, char direction, Player player) {
+    public void placeWord(String word, int row, int col, char direction, Player player, int wordLen) {
         for (int i = 0; i < word.length(); i++) {
             char wordtile = word.charAt(i);
             Tile boardTile = (direction == 'H') ? board.getTile(row, col + i) : board.getTile(row + i, col);
 
-            if (boardTile.getLetter() == ' ') { // If it's an empty space, place the tile (this is checked within canPlaceWord() as well)
-                Tile newTile = player.removeTile(new Tile(wordtile)); // remove from player rack
-                player.addTile(tilePile.deleteTile()); // take from tilePile (bag)
-                if (direction == 'H') {
-                    board.setTile(row, col + i, newTile);
-                } else { // direction == 'V'
-                    board.setTile(row + i, col, newTile);
-                }
+
+            Tile newTile = player.removeTile(new Tile(wordtile)); // remove from player rack
+            player.addTile(tilePile.deleteTile()); // take from tilePile (bag)
+            if (direction == 'H') {
+                board.setTile(row, col + i-wordLen, newTile);
+            } else { // direction == 'V'
+                board.setTile(row + i-wordLen, col, newTile);
             }
+
         }
         addPoints(word, player);
     }
