@@ -14,12 +14,22 @@ This project is a simplified implementation of the Scrabble game using **Java**.
    - If the word is invalid, the player must try again.
 
 3. **Placing Words**  
+<<<<<<< Updated upstream:out/production/Scrabble/README.md
    - Players select the **direction** of the word: Horizontal or Vertical.
    - Players specify the **starting row and column** on the 15x15 board.
+=======
+   - Players select a letter from their hand.
+   - Players select the **direction** of the word: Horizontal or Vertical.
+   - Players place tile selected on board
+>>>>>>> Stashed changes:out/production/Scrabble/src/README.md
 
 4. **End of Turn**  
    - If the move is valid, the board updates with the new word, and the next player’s turn begins.
    - If the move is invalid, the player retries the turn.
+<<<<<<< Updated upstream:out/production/Scrabble/README.md
+=======
+   - If player wants they  can skip
+>>>>>>> Stashed changes:out/production/Scrabble/src/README.md
 
 5. **Winning the Game**  
    - The game continues until all tiles are used or no valid moves remain.
