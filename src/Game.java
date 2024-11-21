@@ -102,7 +102,7 @@ public class Game {
      * and updates the board until the game ends.
      */
     public void play(String word, char direction, int row, int col) {
-//        if (!check.isWord(word.toLowerCase())) { // is the word valid in the wordbank
+//        if (!check.isWord(word.toLowerCase()) || word.length() < 2) { // is the word valid in the wordbank
 //            return;
 //        }
 //

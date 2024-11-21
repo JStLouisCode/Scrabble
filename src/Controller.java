@@ -72,18 +72,23 @@ public abstract class Controller implements ActionListener {
                         String temp = Character.toString(view.getSelectedTile().getLetter());
                         view.setTargetRow(view.getTargetRow() - 1);
                         view.setInputWord(model.getBoard().getTile(view.getTargetRow(), view.getTargetCol()).getLetter() + temp);
+                    }else {
+                        view.addInputWord(view.getSelectedTile().getLetter());
                     }
                 } else {
                     if (model.getBoard().getTile(view.getTargetRow(), view.getTargetCol() - 1).getLetter() != ' ') {
                         String temp = Character.toString(view.getSelectedTile().getLetter());
                         view.setTargetCol(view.getTargetCol() - 1);
                         view.setInputWord(model.getBoard().getTile(view.getTargetRow(), view.getTargetCol()).getLetter() + temp);
+                    }else {
+                        view.addInputWord(view.getSelectedTile().getLetter());
                     }
                 }
                 view.setFirstLetter(false);
             } else {
                 view.addInputWord(view.getSelectedTile().getLetter());
             }
+            System.out.println("Row: " + view.getTargetRow() + " Col: " + view.getTargetCol() +" Word:" + view.getInputWord());
             view.setSelectedTile(null);
             view.updateHandPanel();
             view.disableButtons();
